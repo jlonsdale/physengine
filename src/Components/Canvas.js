@@ -7,7 +7,6 @@ const Canvas = styled.canvas`
   background: black;
   border-style: solid;
   height: 585px;
-  flex: 0 0 80%;
   display: inline-block;
   border-radius: 10px;
 `;
