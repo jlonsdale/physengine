@@ -1,4 +1,21 @@
 body {
-  margin: 1% auto;
   background-color: grey;
+}
+
+#canvas {
+  background-color: black;
+}
+
+#container {
+  background-color: white;
+}
+
+#sidebar {
+  padding: 1% 1% 1% 1%;
+  background-color: white;
+}
+
+#console {
+  padding: 1% 1% 1% 1%;
+  background-color: white;
 }

@@ -11,6 +11,9 @@ export default class HeaderMenu extends React.Component {
           </h2>
         </Menu.Item>
         <Menu.Item>
+          <div> https://github.com/jlonsdale </div>
+        </Menu.Item>
+        <Menu.Item>
           <Button.Group>
             <Button color="red">Red</Button>
             <Button color="orange">Orange</Button>
@@ -26,9 +29,6 @@ export default class HeaderMenu extends React.Component {
             <Button color="grey">Grey</Button>
             <Button color="black">Black</Button>
           </Button.Group>
-        </Menu.Item>
-        <Menu.Item>
-          <div> https://github.com/jlonsdale </div>
         </Menu.Item>
       </Menu>
     );

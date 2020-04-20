@@ -3,44 +3,58 @@ import { Header, Icon, Image, Menu, Button, Segment } from "semantic-ui-react";
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import styled from "styled-components";
 import "./style.css";
-
-import Canvas from "../Components/Canvas";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
 import Engine from "../Engine/engine.js";
 
-const Console = styled.div`
-  margin: 0 auto;
-  width: 90%;
-`;
-
 class Main extends Component {
+  state = { particle: null };
+
   componentDidMount() {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const engine = new Engine(ctx, canvas);
+    console.log(canvas.height);
+    const engine = new Engine(ctx, canvas.height, canvas.width);
     const draw = () => {
       engine.draw();
+      this.setState({ particle: engine.particle });
     };
     setInterval(draw, 10);
   }
 
   render() {
+    const particle = this.particle;
     return (
       <>
         <HeaderMenu />
-        <Container>
-          <Segment>
-            <div>
-              <Button content="Play" icon="play" labelPosition="left" />
-              <Button content="Pause" icon="pause" labelPosition="left" />
+        <div id="container">
+          <Container>
+            <div id="sidebar">
+              <Button
+                content="Play"
+                size="small"
+                icon="play"
+                labelPosition="left"
+              />
+              <Button
+                content="Pause"
+                size="small"
+                icon="pause"
+                labelPosition="left"
+              />
             </div>
-          </Segment>
-          <Canvas id="canvas" />
-        </Container>
-        <Console>
-          <Segment>snadasod </Segment>
-        </Console>
+            <canvas height="600px" width="1000px" id="canvas" />
+
+            <div id="console">
+              {this.state.particle
+                ? "Height: " +
+                  Math.round(this.state.particle.yPos) +
+                  "  Speed: " +
+                  Math.round(this.state.particle.yVel)
+                : null}
+            </div>
+          </Container>
+        </div>
       </>
     );
   }

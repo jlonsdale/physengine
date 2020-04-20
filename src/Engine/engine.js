@@ -1,24 +1,29 @@
+import Particle from "./particle.js";
+
 export default class Engine {
-  constructor(ctx, canvas) {
-    this.canvas = canvas;
+  constructor(ctx, height, width) {
     this.ctx = ctx;
-    this.x = 1;
-    this.y = 1;
+    this.height = height;
+    this.width = width;
+    this.particle = new Particle(50, 50, "blue", height, width);
   }
 
   draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.x += 1;
-    this.y += 1;
-    this.drawBall(this.ctx, this.x, this.y);
+    console.log(this.particle);
+    this.ctx.clearRect(0, 0, this.height, this.width);
+    this.particle.position();
+    this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
   }
 
   drawBall(ctx, x, y) {
-    console.log(this.ctx);
     ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2);
-    ctx.fillStyle = "blue";
+    ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
+    ctx.fillStyle = this.particle.colour;
     ctx.fill();
     ctx.closePath();
+  }
+
+  data() {
+    return "x=" + this.particle.xPos + "y=" + this.particle.yPos;
   }
 }
