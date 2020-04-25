@@ -27,6 +27,16 @@ class Main extends Component {
     this.state.engine.handleClick(x, y);
   }
 
+  handleMouseMove(event) {
+    if (this.state.engine) {
+      const mouseX =
+        event.clientX - this.state.canvas.getBoundingClientRect().left;
+      const mouseY =
+        event.clientY - this.state.canvas.getBoundingClientRect().top;
+      this.state.engine.updateMouse(mouseX, mouseY);
+    }
+  }
+
   render() {
     return (
       <>
@@ -57,15 +67,18 @@ class Main extends Component {
               height="600px"
               width="1000px"
               id="canvas"
-              onClick={e => {
-                this.handleClick(e.nativeEvent);
+              onClick={event => {
+                this.handleClick(event);
+              }}
+              onMouseMove={event => {
+                this.handleMouseMove(event);
               }}
             />
 
             <div id="console">
               {this.state.engine
                 ? "Height: " +
-                  Math.round(600 - this.state.engine.particle.yPos) +
+                  Math.round(590 - this.state.engine.particle.yPos) +
                   "  Speed: " +
                   Math.round(this.state.engine.particle.yVel)
                 : null}

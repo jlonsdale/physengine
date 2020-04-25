@@ -7,6 +7,13 @@ export default class Engine {
     this.height = height;
     this.width = width;
     this.particle = new Particle(width / 2, 0, "red", height, width);
+    this.xMouse = null;
+    this.yMouse = null;
+  }
+
+  updateMouse(x, y) {
+    this.xMouse = x;
+    this.yMouse = y;
   }
 
   handleClick(x, y) {
@@ -14,14 +21,16 @@ export default class Engine {
   }
 
   draw() {
-    this.ctx.clearRect(0, 0, this.height, this.width);
+    this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
     this.particle.position();
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
   }
 
   drawBall(ctx, x, y) {
     ctx.beginPath();
-    ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
+    this.particle.selected
+      ? ctx.arc(this.xMouse, this.yMouse, this.particle.radius, 0, Math.PI * 2)
+      : ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
     ctx.fillStyle = this.particle.colour;
     ctx.fill();
     ctx.closePath();

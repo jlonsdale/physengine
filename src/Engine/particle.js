@@ -33,8 +33,14 @@ export default class Particle {
   click(x, y) {
     if (Math.sqrt((x - this.xPos) ** 2 + (y - this.yPos) ** 2) <= this.radius) {
       this.colour = "white";
-    } else {
+      this.selected = true;
+    } else if (this.selected === true) {
+      this.xPos = x;
+      this.yPos = y;
+      this.yVel = 0;
+      this.xVel = 0;
       this.colour = "red";
+      this.selected = false;
     }
   }
 
