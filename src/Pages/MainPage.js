@@ -8,22 +8,26 @@ import HeaderMenu from "../Components/Menu";
 import Engine from "../Engine/engine.js";
 
 class Main extends Component {
-  state = { particle: null };
-
+  state = { canvas: null, engine: null };
   componentDidMount() {
     const canvas = document.getElementById("canvas");
+    this.setState({ canvas: canvas });
     const ctx = canvas.getContext("2d");
-    console.log(canvas.height);
     const engine = new Engine(ctx, canvas.height, canvas.width);
     const draw = () => {
       engine.draw();
-      this.setState({ particle: engine.particle });
+      this.setState({ engine: engine });
     };
-    setInterval(draw, 10);
+    setInterval(draw, 5);
+  }
+
+  handleClick(event) {
+    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
+    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
+    this.state.engine.handleClick(x, y);
   }
 
   render() {
-    const particle = this.particle;
     return (
       <>
         <HeaderMenu />
@@ -42,15 +46,28 @@ class Main extends Component {
                 icon="pause"
                 labelPosition="left"
               />
+              <Button
+                content="Reset"
+                size="small"
+                icon="redo"
+                labelPosition="left"
+              />
             </div>
-            <canvas height="600px" width="1000px" id="canvas" />
+            <canvas
+              height="600px"
+              width="1000px"
+              id="canvas"
+              onClick={e => {
+                this.handleClick(e.nativeEvent);
+              }}
+            />
 
             <div id="console">
-              {this.state.particle
+              {this.state.engine
                 ? "Height: " +
-                  Math.round(this.state.particle.yPos) +
+                  Math.round(600 - this.state.engine.particle.yPos) +
                   "  Speed: " +
-                  Math.round(this.state.particle.yVel)
+                  Math.round(this.state.engine.particle.yVel)
                 : null}
             </div>
           </Container>

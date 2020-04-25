@@ -2,14 +2,18 @@ import Particle from "./particle.js";
 
 export default class Engine {
   constructor(ctx, height, width) {
+    this.test = null;
     this.ctx = ctx;
     this.height = height;
     this.width = width;
-    this.particle = new Particle(50, 50, "blue", height, width);
+    this.particle = new Particle(width / 2, 0, "red", height, width);
+  }
+
+  handleClick(x, y) {
+    this.particle.click(x, y);
   }
 
   draw() {
-    console.log(this.particle);
     this.ctx.clearRect(0, 0, this.height, this.width);
     this.particle.position();
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);

@@ -6,28 +6,23 @@ export default class HeaderMenu extends React.Component {
     return (
       <Menu>
         <Menu.Item header>
-          <h2>
-            <i class="fas fa-rocket"></i> Physics Engine
-          </h2>
+          <h2>Physics Engine</h2>
         </Menu.Item>
         <Menu.Item>
           <div> https://github.com/jlonsdale </div>
         </Menu.Item>
         <Menu.Item>
           <Button.Group>
-            <Button color="red">Red</Button>
-            <Button color="orange">Orange</Button>
-            <Button color="yellow">Yellow</Button>
-            <Button color="olive">Olive</Button>
+            <Button color="red">Rigid Bodies</Button>
+            <Button color="orange">Magnetic Fields</Button>
+            <Button color="yellow">Electric Fields</Button>
+            <Button color="olive">Springs & Strings</Button>
             <Button color="green">Green</Button>
             <Button color="teal">Teal</Button>
             <Button color="blue">Blue</Button>
             <Button color="violet">Violet</Button>
             <Button color="purple">Purple</Button>
             <Button color="pink">Pink</Button>
-            <Button color="brown">Brown</Button>
-            <Button color="grey">Grey</Button>
-            <Button color="black">Black</Button>
           </Button.Group>
         </Menu.Item>
       </Menu>
