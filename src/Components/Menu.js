@@ -14,9 +14,8 @@ export default class HeaderMenu extends React.Component {
         <Menu.Item>
           <Button.Group>
             <Button color="red">Rigid Bodies</Button>
-            <Button color="orange">Magnetic Fields</Button>
             <Button color="yellow">Electric Fields</Button>
-            <Button color="olive">Springs & Strings</Button>
+            <Button color="green">Springs & Strings</Button>
             <Button color="green">Green</Button>
             <Button color="teal">Teal</Button>
             <Button color="blue">Blue</Button>

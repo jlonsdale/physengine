@@ -5,6 +5,10 @@ export default class Particle {
     this.mass = 0.5;
     this.colour = "red";
 
+    //universe information
+    this.g = 981;
+    this.dt = 0.05;
+
     //canvas information
     this.height = height;
     this.width = width;
@@ -14,20 +18,24 @@ export default class Particle {
     this.yPos = yPos;
     this.yVel = 0;
     this.xVel = 0;
+    this.xForce = 0;
+    this.yForce = this.g * this.mass;
 
     //collision information
     this.cor = 0.6;
-
-    //universe information
-    this.g = 9.81;
-    this.dt = 0.05;
 
     //interactivity information
     this.selected = false;
   }
 
   velocity() {
-    this.yVel += this.g * this.dt;
+    this.yVel += (this.yForce / this.mass) * this.dt;
+    this.xVel += (this.xForce / this.mass) * this.dt;
+  }
+
+  force() {
+    // this.yForce = 5;
+    // this.xForce = 0;
   }
 
   click(x, y) {
@@ -46,8 +54,10 @@ export default class Particle {
 
   position() {
     this.detectCollision();
+    this.force();
     this.velocity();
     this.yPos += this.yVel * this.dt;
+    this.xPos += this.xVel * this.dt;
   }
 
   detectCollision() {
