@@ -7,7 +7,7 @@ export default class Particle {
 
     //universe information
     this.g = 981;
-    this.dt = 0.05;
+    this.dt = 0.005;
 
     //canvas information
     this.height = height;
@@ -34,8 +34,22 @@ export default class Particle {
   }
 
   force() {
-    // this.yForce = 5;
-    // this.xForce = 0;
+    const forcePoint = [this.width / 2, this.height / 2];
+    let xDistance = forcePoint[0] - this.xPos;
+    const yDistance = forcePoint[1] - this.yPos;
+
+    this.yForce = yDistance
+      ? this.g * this.mass - (1 / Math.abs(yDistance)) * 10000
+      : this.g * this.mass;
+
+    if (Math.round(xDistance === 0)) {
+      this.xForce = 0;
+    } else {
+      xDistance < 0
+        ? (this.xForce = -(1 / Math.abs(xDistance)) * 1000)
+        : (this.xForce = (1 / Math.abs(xDistance)) * 1000);
+    }
+    console.log(this.xForce);
   }
 
   click(x, y) {

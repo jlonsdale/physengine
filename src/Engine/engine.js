@@ -24,6 +24,11 @@ export default class Engine {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
     this.particle.position();
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
+    this.ctx.beginPath();
+    this.ctx.arc(this.width / 2, this.height / 2, 5, 0, Math.PI * 2);
+    this.ctx.fillStyle = "yellow";
+    this.ctx.fill();
+    this.ctx.closePath();
   }
 
   drawBall(ctx, x, y) {
