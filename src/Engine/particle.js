@@ -22,7 +22,7 @@ export default class Particle {
     this.yForce = this.g * this.mass;
 
     //collision information
-    this.cor = 0.6;
+    this.cor = 0.4;
 
     //interactivity information
     this.selected = false;
@@ -33,7 +33,13 @@ export default class Particle {
     this.xVel += (this.xForce / this.mass) * this.dt;
   }
 
+  friction() {
+    this.xVel = this.xVel * 0.95;
+  }
+
   force() {
+    //  this is BS calculate force then split components sin/cos lololoo
+
     const forcePoint = [this.width / 2, this.height / 2];
     let xDistance = forcePoint[0] - this.xPos;
     const yDistance = forcePoint[1] - this.yPos;
@@ -42,14 +48,20 @@ export default class Particle {
       ? this.g * this.mass - (1 / Math.abs(yDistance)) * 10000
       : this.g * this.mass;
 
-    if (Math.round(xDistance === 0)) {
-      this.xForce = 0;
+    if (xDistance === 0) {
     } else {
       xDistance < 0
-        ? (this.xForce = -(1 / Math.abs(xDistance)) * 1000)
+        ? (this.xForce = (-1 / Math.abs(xDistance)) * 1000)
         : (this.xForce = (1 / Math.abs(xDistance)) * 1000);
     }
-    console.log(this.xForce);
+
+    if (Math.round(yDistance === 0)) {
+    } else {
+      yDistance < 0
+        ? (this.yForce = this.g * this.mass + (1 / Math.abs(yDistance)) * 10000)
+        : (this.yForce =
+            this.g * this.mass - (1 / Math.abs(yDistance)) * 10000);
+    }
   }
 
   click(x, y) {
@@ -61,6 +73,8 @@ export default class Particle {
       this.yPos = y;
       this.yVel = 0;
       this.xVel = 0;
+      this.yForce = 0;
+      this.xForce = 0;
       this.colour = "red";
       this.selected = false;
     }

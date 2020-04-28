@@ -80,7 +80,9 @@ class Main extends Component {
                 ? "Height: " +
                   Math.round(590 - this.state.engine.particle.yPos) +
                   "  Speed: " +
-                  Math.round(this.state.engine.particle.yVel)
+                  Math.round(this.state.engine.particle.yVel) +
+                  "  xForce: " +
+                  Math.round(this.state.engine.particle.xForce)
                 : null}
             </div>
           </Container>
