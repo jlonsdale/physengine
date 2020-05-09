@@ -2,12 +2,12 @@ export default class Particle {
   constructor(xPos, yPos, colour, height, width) {
     //ball information
     this.radius = 10;
-    this.mass = 0.5;
+    this.mass = 5;
     this.colour = "red";
 
     //universe information
     this.g = 981;
-    this.dt = 0.005;
+    this.dt = 0.01;
 
     //canvas information
     this.height = height;
@@ -18,90 +18,68 @@ export default class Particle {
     this.yPos = yPos;
     this.yVel = 0;
     this.xVel = 0;
+    this.acc = [0, 0];
+
     this.xForce = 0;
-    this.yForce = this.g * this.mass;
+    this.YForce = 0;
+    this.dXForce = 0;
+    this.dYForce = 0;
 
     //collision information
     this.cor = 0.4;
+    this.floorContact = false;
+    this.wallContact = false;
 
     //interactivity information
     this.selected = false;
   }
 
   velocity() {
-    this.yVel += (this.yForce / this.mass) * this.dt;
-    this.xVel += (this.xForce / this.mass) * this.dt;
+    this.acceleration();
+    this.yVel += this.acc[1] * this.dt;
   }
 
-  friction() {
-    this.xVel = this.xVel * 0.95;
+  acceleration() {
+    this.forceDifference();
+    this.acc[0] = (this.dxForce / this.mass) * this.dt*100;
+    this.acc[1] = (this.dYForce / this.mass) * this.dt*100;
   }
 
   force() {
-    //  this is BS calculate force then split components sin/cos lololoo
-
-    const forcePoint = [this.width / 2, this.height / 2];
-    let xDistance = forcePoint[0] - this.xPos;
-    const yDistance = forcePoint[1] - this.yPos;
-
-    this.yForce = yDistance
-      ? this.g * this.mass - (1 / Math.abs(yDistance)) * 10000
-      : this.g * this.mass;
-
-    if (xDistance === 0) {
-    } else {
-      xDistance < 0
-        ? (this.xForce = (-1 / Math.abs(xDistance)) * 1000)
-        : (this.xForce = (1 / Math.abs(xDistance)) * 1000);
-    }
-
-    if (Math.round(yDistance === 0)) {
-    } else {
-      yDistance < 0
-        ? (this.yForce = this.g * this.mass + (1 / Math.abs(yDistance)) * 10000)
-        : (this.yForce =
-            this.g * this.mass - (1 / Math.abs(yDistance)) * 10000);
-    }
+    this.yForce = this.mass * this.g;
   }
 
-  click(x, y) {
-    if (Math.sqrt((x - this.xPos) ** 2 + (y - this.yPos) ** 2) <= this.radius) {
-      this.colour = "white";
-      this.selected = true;
-    } else if (this.selected === true) {
-      this.xPos = x;
-      this.yPos = y;
-      this.yVel = 0;
-      this.xVel = 0;
-      this.yForce = 0;
-      this.xForce = 0;
-      this.colour = "red";
-      this.selected = false;
+  forceDifference() {
+    const currentYforce = this.YForce;
+    const currentXforce = this.XForce;
+    this.force();
+    if (currentYforce != this.yForce) {
+      this.dYForce = this.yForce-currentYforce;
+    } else {
+      this.dYForce = 0;
     }
   }
 
   position() {
     this.detectCollision();
-    this.force();
     this.velocity();
     this.yPos += this.yVel * this.dt;
-    this.xPos += this.xVel * this.dt;
   }
 
   detectCollision() {
-    if (this.yPos + this.radius > this.height) {
+    if (this.yPos + this.radius >= this.height) {
+      this.yForce += (this.yVel * (1 - this.cor))
       this.yPos = this.height - this.radius;
-      this.yVel = -this.yVel * this.cor;
-    }
-    if (this.yPos - this.radius < 0) {
+    } else if (this.yPos - this.radius < 0) {
       this.yPos = this.radius;
       this.yVel = -this.yVel * this.cor;
+    } else {
+      this.floorContact = false;
     }
     if (this.xPos + this.radius > this.width) {
       this.xPos = this.width - this.radius;
       this.xVel = -this.xVel * this.cor;
-    }
-    if (this.xPos - this.radius < 0) {
+    } else if (this.xPos - this.radius < 0) {
       this.xPos = this.radius;
       this.xVel = -this.xVel * this.cor;
     }

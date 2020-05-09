@@ -77,12 +77,7 @@ class Main extends Component {
 
             <div id="console">
               {this.state.engine
-                ? "Height: " +
-                  Math.round(590 - this.state.engine.particle.yPos) +
-                  "  Speed: " +
-                  Math.round(this.state.engine.particle.yVel) +
-                  "  xForce: " +
-                  Math.round(this.state.engine.particle.xForce)
+                ? this.state.engine.data()
                 : null}
             </div>
           </Container>
