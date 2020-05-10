@@ -5,7 +5,7 @@ export default class Engine {
     this.ctx = ctx;
     this.height = height;
     this.width = width;
-    this.particle = new Particle(width / 2, 0, "red", height, width);
+    this.particle = new Particle(width / 2, 200, "red", height, width);
     this.xMouse = null;
     this.yMouse = null;
   }

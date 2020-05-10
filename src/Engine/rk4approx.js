@@ -1,4 +1,4 @@
-function rk4(x, v, a, dt) {
+export default function rk4(x, v, a, dt) {
     var x1 = x;
     var v1 = v;
     var a1 = a(x1, v1, 0);

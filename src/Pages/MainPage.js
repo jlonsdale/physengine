@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { Header, Icon, Image, Menu, Button, Segment } from "semantic-ui-react";
-import { Route, NavLink, HashRouter } from "react-router-dom";
-import styled from "styled-components";
+import { Button } from "semantic-ui-react";
 import "./style.css";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";

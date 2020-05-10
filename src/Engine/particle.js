@@ -9,7 +9,7 @@ export default class Particle {
 
     //universe information
     this.g = 981;
-    this.dt = 0.005;
+    this.dt = 0.001;
 
     //canvas information
     this.height = height;
@@ -37,14 +37,31 @@ export default class Particle {
   }
 
   velocity() {
-    this.acceleration();
-    this.yVel += this.acc[1] * this.dt;
+    const rk4x = rk4(
+      this.xPos,
+      this.xVel,
+      function (x, v, dt) {
+        var stiffness = 400,
+          damping = 0.25;
+        return -stiffness * x - damping * v;
+      },
+      this.dt
+    );
+    const rk4y = rk4(
+      this.yPos,
+      this.yVel,
+      function (x, v, dt) {
+        var stiffness = 400,
+          damping = 0.25;
+        return -stiffness * (x/100) - damping * (v/100);
+      },
+      this.dt
+    );
+    console.log(this.yVel)
+    this.yVel = rk4y[1];
   }
 
-  acceleration() {
-    this.acc[0] = this.xForce / this.mass;
-    this.acc[1] = this.yForce / this.mass;
-  }
+  acceleration() {}
 
   forceDifference() {
     const currentYforce = this.yForce;
@@ -58,26 +75,9 @@ export default class Particle {
   position() {
     this.detectCollision();
     this.velocity();
-    this.yPos += this.yVel * this.dt * 100;
+    this.yPos += this.yVel * this.dt*100;
   }
 
   detectCollision() {
-    if (this.yPos + this.radius > this.height) {
-      console.log('here')
-      this.yPos = this.height - this.radius;
-      this.yVel=this.yVel*(-1)
-      this.yForce -= (this.mass * this.g) / 100;
-    }
-    if (this.yPos - this.radius < 0) {
-      this.yPos = this.radius;
-    }
-    if (this.xPos + this.radius > this.width) {
-      this.xPos = this.width - this.radius;
-      this.xVel = -this.xVel * this.cor;
-    }
-    if (this.xPos - this.radius < 0) {
-      this.xPos = this.radius;
-      this.xVel = -this.xVel * this.cor;
-    }
   }
 }
