@@ -1,3 +1,5 @@
+import rk4 from "./rk4approx.js";
+
 export default class Particle {
   constructor(xPos, yPos, colour, height, width) {
     //ball information
@@ -7,7 +9,7 @@ export default class Particle {
 
     //universe information
     this.g = 981;
-    this.dt = 0.01;
+    this.dt = 0.005;
 
     //canvas information
     this.height = height;
@@ -21,7 +23,7 @@ export default class Particle {
     this.acc = [0, 0];
 
     this.xForce = 0;
-    this.YForce = 0;
+    this.yForce = (this.mass * this.g) / 100;
     this.dXForce = 0;
     this.dYForce = 0;
 
@@ -40,21 +42,14 @@ export default class Particle {
   }
 
   acceleration() {
-    this.forceDifference();
-    this.acc[0] = (this.dxForce / this.mass) * this.dt*100;
-    this.acc[1] = (this.dYForce / this.mass) * this.dt*100;
-  }
-
-  force() {
-    this.yForce = this.mass * this.g;
+    this.acc[0] = this.xForce / this.mass;
+    this.acc[1] = this.yForce / this.mass;
   }
 
   forceDifference() {
-    const currentYforce = this.YForce;
-    const currentXforce = this.XForce;
-    this.force();
-    if (currentYforce != this.yForce) {
-      this.dYForce = this.yForce-currentYforce;
+    const currentYforce = this.yForce;
+    if (currentYforce !== this.yForce) {
+      this.dYForce = this.yForce - currentYforce;
     } else {
       this.dYForce = 0;
     }
@@ -63,23 +58,24 @@ export default class Particle {
   position() {
     this.detectCollision();
     this.velocity();
-    this.yPos += this.yVel * this.dt;
+    this.yPos += this.yVel * this.dt * 100;
   }
 
   detectCollision() {
-    if (this.yPos + this.radius >= this.height) {
-      this.yForce += (this.yVel * (1 - this.cor))
+    if (this.yPos + this.radius > this.height) {
+      console.log('here')
       this.yPos = this.height - this.radius;
-    } else if (this.yPos - this.radius < 0) {
+      this.yVel=this.yVel*(-1)
+      this.yForce -= (this.mass * this.g) / 100;
+    }
+    if (this.yPos - this.radius < 0) {
       this.yPos = this.radius;
-      this.yVel = -this.yVel * this.cor;
-    } else {
-      this.floorContact = false;
     }
     if (this.xPos + this.radius > this.width) {
       this.xPos = this.width - this.radius;
       this.xVel = -this.xVel * this.cor;
-    } else if (this.xPos - this.radius < 0) {
+    }
+    if (this.xPos - this.radius < 0) {
       this.xPos = this.radius;
       this.xVel = -this.xVel * this.cor;
     }

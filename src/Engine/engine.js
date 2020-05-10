@@ -2,7 +2,6 @@ import Particle from "./particle.js";
 
 export default class Engine {
   constructor(ctx, height, width) {
-    this.test = null;
     this.ctx = ctx;
     this.height = height;
     this.width = width;
@@ -38,11 +37,13 @@ export default class Engine {
 
   data() {
     return (
-      "y : " +
-      this.particle.yPos +
-      "| |" +
-      "y velocity : " +
-      this.particle.yVel
+
+      "| |   " + this.particle.yForce+
+      "   | |   " +
+      "   | |   " + this.particle.acc+
+      "   | |" 
+
+
     );
   }
 }
