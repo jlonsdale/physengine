@@ -4,12 +4,12 @@ export default class Particle {
   constructor(xPos, yPos, colour, height, width) {
     //ball information
     this.radius = 10;
-    this.mass = 5;
+    this.mass = 0.5;
     this.colour = "red";
 
     //universe information
-    this.g = 981;
-    this.dt = 0.001;
+    this.g = 9.81;
+    this.dt = 0.01;
 
     //canvas information
     this.height = height;
@@ -20,64 +20,38 @@ export default class Particle {
     this.yPos = yPos;
     this.yVel = 0;
     this.xVel = 0;
-    this.acc = [0, 0];
-
-    this.xForce = 0;
-    this.yForce = (this.mass * this.g) / 100;
-    this.dXForce = 0;
-    this.dYForce = 0;
 
     //collision information
-    this.cor = 0.4;
-    this.floorContact = false;
-    this.wallContact = false;
+    this.cor = 0.80;
 
     //interactivity information
     this.selected = false;
+    this.stopped = false;
   }
 
-  velocity() {
-    const rk4x = rk4(
-      this.xPos,
-      this.xVel,
-      function (x, v, dt) {
-        var stiffness = 400,
-          damping = 0.25;
-        return -stiffness * x - damping * v;
-      },
-      this.dt
-    );
-    const rk4y = rk4(
-      this.yPos,
-      this.yVel,
-      function (x, v, dt) {
-        var stiffness = 400,
-          damping = 0.25;
-        return -stiffness * (x/100) - damping * (v/100);
-      },
-      this.dt
-    );
-    console.log(this.yVel)
-    this.yVel = rk4y[1];
-  }
-
-  acceleration() {}
-
-  forceDifference() {
-    const currentYforce = this.yForce;
-    if (currentYforce !== this.yForce) {
-      this.dYForce = this.yForce - currentYforce;
-    } else {
-      this.dYForce = 0;
+  force() {
+    const mass = this.mass;
+    let friction = this.yVel>0 ? -0.1 : 0.1
+    let normalForce = 0;
+    let gravity = mass * this.g;
+    if (this.yPos + this.radius > this.height) {
+      this.yPos = this.height - this.radius;
+      console.log( Math.abs(this.yVel))
+      Math.abs(this.yVel) < 1
+        ? (this.yVel = 0)
+        : (this.yVel = -this.yVel * this.cor);
     }
+    return function (x, v, dt) {
+      return ((gravity - normalForce + friction*v*v) / mass);
+    };
   }
 
-  position() {
-    this.detectCollision();
-    this.velocity();
-    this.yPos += this.yVel * this.dt*100;
+  calculateKinematics() {
+    let acc = this.force();
+    const rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+    this.yPos = rk4y[0] * 100;
+    this.yVel = rk4y[1] * 100;
   }
 
-  detectCollision() {
-  }
+  detectCollision() {}
 }

@@ -21,7 +21,7 @@ export default class Engine {
 
   draw() {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
-    this.particle.position();
+    this.particle.calculateKinematics();
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
   }
 
@@ -38,7 +38,7 @@ export default class Engine {
   data() {
     return (
 
-      "| |   " + this.particle.yForce+
+      "| |   " + this.particle.yVel/100+
       "   | |   " +
       "   | |   " + this.particle.acc+
       "   | |" 

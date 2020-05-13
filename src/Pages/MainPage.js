@@ -16,7 +16,7 @@ class Main extends Component {
       engine.draw();
       this.setState({ engine: engine });
     };
-    setInterval(draw, 1);
+    setInterval(draw, 10);
   }
 
   handleClick(event) {
