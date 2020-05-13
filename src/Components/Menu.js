@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Icon, Segment, Button } from "semantic-ui-react";
+import { Menu, Icon, Button } from "semantic-ui-react";
 
 export default class HeaderMenu extends React.Component {
   render() {
@@ -22,9 +22,15 @@ export default class HeaderMenu extends React.Component {
             <Button color="violet">
               <Icon name="lightbulb" /> Electric Fields
             </Button>
-            <Button color="purple"> <Icon name="music" /> Harmonic Motion</Button>
-            <Button color="pink">  <Icon name="square full" /> Rigid Bodies</Button>
-            <Button color="red">  <Icon name="area graph" /> Data & Graphs</Button>
+            <Button color="purple">
+              <Icon name="music" /> Harmonic Motion
+            </Button>
+            <Button color="pink">
+              <Icon name="square full" /> Rigid Bodies
+            </Button>
+            <Button color="red">
+              <Icon name="area graph" /> Data & Graphs
+            </Button>
           </Button.Group>
         </Menu.Item>
       </Menu>

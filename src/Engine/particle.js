@@ -9,7 +9,7 @@ export default class Particle {
 
     //universe information
     this.g = 9.81;
-    this.dt = 0.01;
+    this.dt = 0.001;
 
     //canvas information
     this.height = height;
@@ -22,7 +22,7 @@ export default class Particle {
     this.xVel = 0;
 
     //collision information
-    this.cor = 0.80;
+    this.cor = 0.8;
 
     //interactivity information
     this.selected = false;
@@ -31,24 +31,29 @@ export default class Particle {
 
   force() {
     const mass = this.mass;
-    let friction = this.yVel>0 ? -0.1 : 0.1
+    // let friction = this.yVel>0 ? -0.1 : 0.1
+    let friction = 0;
     let normalForce = 0;
     let gravity = mass * this.g;
     if (this.yPos + this.radius > this.height) {
+      console.log('bloop')
       this.yPos = this.height - this.radius;
-      console.log( Math.abs(this.yVel))
-      Math.abs(this.yVel) < 1
-        ? (this.yVel = 0)
-        : (this.yVel = -this.yVel * this.cor);
+      this.yVel = -this.yVel * this.cor;
     }
     return function (x, v, dt) {
-      return ((gravity - normalForce + friction*v*v) / mass);
+      return (gravity - normalForce + friction * v * v) / mass;
     };
   }
 
   calculateKinematics() {
     let acc = this.force();
-    const rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+    let rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+    this.yPos = rk4y[0] * 100;
+    this.yVel = rk4y[1] * 100;
+    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+    this.yPos = rk4y[0] * 100;
+    this.yVel = rk4y[1] * 100;
+    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
     this.yPos = rk4y[0] * 100;
     this.yVel = rk4y[1] * 100;
   }
