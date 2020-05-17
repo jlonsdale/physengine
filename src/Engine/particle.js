@@ -31,12 +31,10 @@ export default class Particle {
 
   force() {
     const mass = this.mass;
-    // let friction = this.yVel>0 ? -0.1 : 0.1
-    let friction = 0;
+    let friction = this.yVel>0 ? -0.1 : 0.1
     let normalForce = 0;
     let gravity = mass * this.g;
     if (this.yPos + this.radius > this.height) {
-      console.log('bloop')
       this.yPos = this.height - this.radius;
       this.yVel = -this.yVel * this.cor;
     }
@@ -56,7 +54,19 @@ export default class Particle {
     rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
     this.yPos = rk4y[0] * 100;
     this.yVel = rk4y[1] * 100;
+    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+    this.yPos = rk4y[0] * 100;
+    this.yVel = rk4y[1] * 100;
   }
 
-  detectCollision() {}
+  detectCollision() {
+    if (this.yPos + this.radius > this.height) {
+      this.yPos = this.height - this.radius;
+      this.yVel = -this.yVel * this.cor;
+    }
+    if (this.yPos + this.radius > this.height) {
+      this.yPos = this.radius;
+      this.yVel = -this.yVel * this.cor;
+    }
+  }
 }
