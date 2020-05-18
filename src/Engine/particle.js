@@ -30,43 +30,41 @@ export default class Particle {
   }
 
   force() {
+    this.detectCollision();
     const mass = this.mass;
-    let friction = this.yVel>0 ? -0.1 : 0.1
+    let friction = this.yVel > 0 ? -0.1 : 0.1;
     let normalForce = 0;
     let gravity = mass * this.g;
-    if (this.yPos + this.radius > this.height) {
-      this.yPos = this.height - this.radius;
-      this.yVel = -this.yVel * this.cor;
-    }
     return function (x, v, dt) {
       return (gravity - normalForce + friction * v * v) / mass;
     };
   }
 
   calculateKinematics() {
+    if (this.stopped) {
+      this.yVel = 0
+    }
+    else {
     let acc = this.force();
-    let rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
-    this.yPos = rk4y[0] * 100;
-    this.yVel = rk4y[1] * 100;
-    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
-    this.yPos = rk4y[0] * 100;
-    this.yVel = rk4y[1] * 100;
-    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
-    this.yPos = rk4y[0] * 100;
-    this.yVel = rk4y[1] * 100;
-    rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
-    this.yPos = rk4y[0] * 100;
-    this.yVel = rk4y[1] * 100;
+    var times = 4;
+    for (var i = 0; i < times; i++) {
+      let rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+      this.yPos = rk4y[0] * 100;
+      this.yVel = rk4y[1] * 100;
+    }
   }
+  } 
 
   detectCollision() {
     if (this.yPos + this.radius > this.height) {
       this.yPos = this.height - this.radius;
-      this.yVel = -this.yVel * this.cor;
+      Math.abs(this.yVel/100)>0.5 ? this.yVel = -this.yVel * this.cor : this.stopped = true;
     }
-    if (this.yPos + this.radius > this.height) {
+    else if (this.yPos + this.radius > this.height) {
       this.yPos = this.radius;
       this.yVel = -this.yVel * this.cor;
+    }
+    else {
     }
   }
 }
