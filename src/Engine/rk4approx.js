@@ -16,5 +16,3 @@ export default function rk4(x, v, a, dt) {
   return [xf, vf, a1];
   }
 
-
-//sourced from https://mtdevans.com/2013/05/fourth-order-runge-kutta-algorithm-in-javascript-with-demo/

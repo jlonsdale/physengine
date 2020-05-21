@@ -4,8 +4,8 @@ export default class Particle {
   constructor(xPos, yPos, colour, height, width) {
     //ball information
     this.radius = 10;
-    this.mass = 0.5;
-    this.colour = "red";
+    this.mass = 10;
+    this.colour = 'red'
 
     //universe information
     this.g = 9.81;
@@ -23,30 +23,53 @@ export default class Particle {
 
     //collision information
     this.cor = 0.8;
+    this.cof = 0.2;
 
     //interactivity information
     this.selected = false;
     this.stopped = false;
   }
 
+  click(x,y) {
+    this.stopped = false
+    this.selected? this.selected=false : this.selected=true;
+    this.colour = this.selected? 'white':'red';
+    this.stopped = false;
+    this.xPos=x
+    this.yPos=y
+    this.yVel = 0;
+    this.xVel = 0;
+  }
+
   force() {
-    this.detectCollision();
     const mass = this.mass;
-    let friction = this.yVel > 0 ? -0.1 : 0.1;
-    let normalForce = 0;
+    let normalForce = (this.yPos + this.radius > this.height)? mass*this.g : 0;
+    let friction = this.friction(this.yVel)
     let gravity = mass * this.g;
     return function (x, v, dt) {
-      return (gravity - normalForce + friction * v * v) / mass;
+      return (gravity - normalForce + friction*v*v) / mass;
     };
   }
 
+  friction(v) {
+    switch(v) {
+      case v===0:
+        return 0
+      case v>0:
+        return this.cof
+      default:
+        return -this.cof
+    }
+  }
+
   calculateKinematics() {
+    this.detectCollision();
     if (this.stopped) {
       this.yVel = 0
     }
     else {
     let acc = this.force();
-    var times = 4;
+    var times = 5;
     for (var i = 0; i < times; i++) {
       let rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
       this.yPos = rk4y[0] * 100;
@@ -57,8 +80,8 @@ export default class Particle {
 
   detectCollision() {
     if (this.yPos + this.radius > this.height) {
+      Math.abs(this.yVel/100)>0.5 ? this.yVel = -this.yVel * this.cor : this.yVel = 0;
       this.yPos = this.height - this.radius;
-      Math.abs(this.yVel/100)>0.5 ? this.yVel = -this.yVel * this.cor : this.stopped = true;
     }
     else if (this.yPos + this.radius > this.height) {
       this.yPos = this.radius;

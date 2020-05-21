@@ -1,4 +1,4 @@
-import React, { Component, useCallback } from "react";
+import React, { Component } from "react";
 import { Button } from "semantic-ui-react";
 import "./style.css";
 import Container from "../Components/Container";
