@@ -16,7 +16,18 @@ function EnvironmentalConditions(name) {
         step={0.1}
         type="range"
       />
-      <div>frictional constant</div>
+      <div>frictional constant (floor resistance) </div>
+      <Form.Input
+        min={0.1}
+        max={0.8}
+        name="duration"
+        onChange={(e) => {
+          console.log(e.target.value);
+        }}
+        step={0.1}
+        type="range"
+      />
+      <div>frictional constant (air resistance) </div>
       <Form.Input
         min={0.1}
         max={0.8}
