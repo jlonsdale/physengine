@@ -4,9 +4,24 @@ import "./style.css";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
 import Engine from "../Engine/engine.js";
+import { EnvironmentalConditions } from "../Components/MenuComponents";
+
+const menuStates = {
+  ENVIROMENTAL_CONDITIONS: "ENVIROMENTAL_CONDITIONS",
+  ELECTRIC_FIELDS: "ELECTRIC_FIELDS",
+  HARMONIC_MOTION: "HARMONIC_MOTION",
+  DATA_AND_GRAPHS: "DATA_AND_GRAPHS",
+};
 
 class Main extends Component {
-  state = { canvas: null, engine: null, interval: null };
+  state = {
+    canvas: null,
+    engine: null,
+    interval: null,
+    x1: null,
+    y1: null,
+    menu: "environmentalConditions",
+  };
   componentDidMount() {
     const canvas = document.getElementById("canvas");
     this.setState({ canvas: canvas });
@@ -16,6 +31,10 @@ class Main extends Component {
     const interval = setInterval(this.draw, 1);
     this.setState({ interval: interval });
   }
+
+  updateMenu = (type) => {
+    this.setState = { menu: type };
+  };
 
   draw = () => {
     let engine = this.state.engine;
@@ -35,14 +54,23 @@ class Main extends Component {
   };
 
   play = () => {
-      const interval = setInterval(this.draw, 1);
-      this.setState({ interval: interval });
+    //prevents intervals from stacking
+    clearInterval(this.state.interval);
+
+    const interval = setInterval(this.draw, 1);
+    this.setState({ interval: interval });
   };
 
-  handleClick(event) {
+  handleMouseDown(event) {
     const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
     const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
     this.state.engine.handleClick(x, y);
+  }
+  
+  handleMouseUp(event) {
+    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
+    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
+    this.state.engine.handleLetGo(x, y);
   }
 
   handleMouseMove(event) {
@@ -61,28 +89,33 @@ class Main extends Component {
         <HeaderMenu />
         <div id="container">
           <Container>
-            <div id="sidebar">
-              <Button
-                content="Play"
-                size="small"
-                icon="play"
-                labelPosition="left"
-                onClick={this.play}
-              />
-              <Button
-                content="Pause"
-                size="small"
-                icon="pause"
-                labelPosition="left"
-                onClick={this.stop}
-              />
-              <Button
-                content="Reset"
-                size="small"
-                icon="redo"
-                labelPosition="left"
-              />
-            </div>
+            <center>
+              <div id="sidebar">
+                <span>
+                  <Button
+                    content="Play"
+                    size="tiny"
+                    icon="play"
+                    labelPosition="left"
+                    onClick={this.play}
+                  />
+                  <Button
+                    content="Pause"
+                    size="tiny"
+                    icon="pause"
+                    labelPosition="left"
+                    onClick={this.stop}
+                  />
+                  <Button
+                    content="Reset"
+                    size="tiny"
+                    icon="redo"
+                    labelPosition="left"
+                  />
+                </span>
+                <EnvironmentalConditions></EnvironmentalConditions>
+              </div>
+            </center>
             <canvas
               height="600px"
               width="1000px"
@@ -90,7 +123,10 @@ class Main extends Component {
               onClick={(event) => {
                 this.handleClick(event);
               }}
-              onMouseMove={(event) => {
+              onMouseDown={(event) => {
+                this.handleMouseMove(event);
+              }}
+              onMouseUp={(event) => {
                 this.handleMouseMove(event);
               }}
             />
