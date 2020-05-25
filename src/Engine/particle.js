@@ -22,25 +22,14 @@ export default class Particle {
     this.xVel = 0;
 
     //collision information
-    this.cor = 0.8;
+    this.cor = 0.2;
     this.cof = 0.2;
 
     //interactivity information
     this.selected = false;
   }
 
-  click(x, y) {
-    this.stopped = false;
-    this.selected ? (this.selected = false) : (this.selected = true);
-    this.colour = this.selected ? "white" : "red";
-    this.stopped = false;
-    this.xPos = x;
-    this.yPos = y;
-    this.yVel = 0;
-    this.xVel = 0;
-  }
-
-  force() {
+  yForce() {
     const mass = this.mass;
     let normalForce = this.yPos + this.radius > this.height ? mass * this.g : 0;
     let friction = this.friction(this.yVel);
@@ -48,6 +37,24 @@ export default class Particle {
     return function (x, v, dt) {
       return (gravity - normalForce + friction * v * v) / mass;
     };
+  }
+
+  xForce() {
+    return function (x, v, dt) {
+      return 0;
+    };
+  }
+
+  select() {
+    this.selected ? (this.selected = false) : (this.selected = true);
+  }
+
+  throw(x1, x2, y1, y2, time) {
+    this.select();
+    this.xPos = x2;
+    this.yPos = y2;
+    this.xVel = (x2 - x1) / time;
+    this.yVel = (y2 - y1) / time;
   }
 
   friction(v) {
@@ -63,13 +70,16 @@ export default class Particle {
 
   calculateKinematics() {
     this.detectCollision();
-
-    let acc = this.force();
     var times = 5;
     for (var i = 0; i < times; i++) {
-      let rk4y = rk4(this.yPos / 100, this.yVel / 100, acc, this.dt);
+      let rk4y = rk4(this.yPos / 100, this.yVel / 100, this.yForce(), this.dt);
       this.yPos = rk4y[0] * 100;
       this.yVel = rk4y[1] * 100;
+    }
+    for (var j = 0; j < times; j++) {
+      let rk4x = rk4(this.xPos / 100, this.xVel / 100, this.xForce(), this.dt);
+      this.xPos = rk4x[0] * 100;
+      this.xVel = rk4x[1] * 100;
     }
   }
 

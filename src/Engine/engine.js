@@ -15,8 +15,19 @@ export default class Engine {
     this.yMouse = y;
   }
 
-  handleClick(x, y) {
-    this.particle.click(x, y);
+  isWithinBounds(x, y) {
+    const inBounds =
+      Math.sqrt(
+        (this.particle.xPos - x) * (this.particle.xPos - x) +
+          (this.particle.yPos - y) * (this.particle.yPos - y)
+      ) < this.particle.radius;
+    if (inBounds) this.particle.select();
+    return inBounds;
+  }
+
+  handleThrow(x1, x2, y1, y2, time) {
+    console.log("here");
+    this.particle.throw(x1, x2, y1, y2, time);
   }
 
   draw() {
@@ -37,13 +48,12 @@ export default class Engine {
 
   data() {
     return (
-
-      "| |   " + this.particle.yVel/100+
+      "| |   " +
+      this.particle.yVel / 100 +
       "   | |   " +
-      "   | |   " + this.particle.acc+
-      "   | |" 
-
-
+      "   | |   " +
+      this.particle.acc +
+      "   | |"
     );
   }
 }

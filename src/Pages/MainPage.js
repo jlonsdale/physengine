@@ -20,6 +20,7 @@ class Main extends Component {
     interval: null,
     x1: null,
     y1: null,
+    time: null,
     menu: "environmentalConditions",
   };
   componentDidMount() {
@@ -62,19 +63,30 @@ class Main extends Component {
   };
 
   handleMouseDown(event) {
-    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
-    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    this.state.engine.handleClick(x, y);
+    const y1 = event.clientY - this.state.canvas.getBoundingClientRect().top;
+    const x1 = event.clientX - this.state.canvas.getBoundingClientRect().left;
+    if (this.state.engine.isWithinBounds(x1, y1)) {
+      this.setState({ x1: x1 });
+      this.setState({ y1: y1 });
+      this.setState({ time: Date.now() });
+    }
   }
-  
+
   handleMouseUp(event) {
-    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
-    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    this.state.engine.handleLetGo(x, y);
+    const y2 = event.clientY - this.state.canvas.getBoundingClientRect().top;
+    const x2 = event.clientX - this.state.canvas.getBoundingClientRect().left;
+    if (this.state.x1 && this.state.y1 && this.state.time) {
+      const time = Math.abs(this.state.time - Date.now()) / 1000;
+      this.state.engine.handleThrow(this.state.x1, x2, this.state.y1, y2, time);
+      this.setState({ x1: null });
+      this.setState({ y1: null });
+      this.setState({ time: null });
+    }
   }
 
   handleMouseMove(event) {
-    if (this.state.engine) {
+    console.log(this.state.engine.particle.selected);
+    if (this.state.engine && this.state.engine.particle.selected) {
       const mouseX =
         event.clientX - this.state.canvas.getBoundingClientRect().left;
       const mouseY =
@@ -120,13 +132,13 @@ class Main extends Component {
               height="600px"
               width="1000px"
               id="canvas"
-              onClick={(event) => {
-                this.handleClick(event);
-              }}
               onMouseDown={(event) => {
-                this.handleMouseMove(event);
+                this.handleMouseDown(event);
               }}
               onMouseUp={(event) => {
+                this.handleMouseUp(event);
+              }}
+              onMouseMove={(event) => {
                 this.handleMouseMove(event);
               }}
             />
