@@ -3,9 +3,8 @@ import { Form, Grid, Image, Transition } from "semantic-ui-react";
 
 function EnvironmentalConditions(name) {
   return (
-    <div class="ui blue inverted segment">
+    <div>
       <h3> Environmental Conditions </h3>
-
       <div>coefficient of restitution</div>
       <Form.Input
         min={0.1}

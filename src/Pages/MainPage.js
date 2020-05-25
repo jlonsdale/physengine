@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Segment } from "semantic-ui-react";
 import "./style.css";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
@@ -11,6 +11,7 @@ const menuStates = {
   ELECTRIC_FIELDS: "ELECTRIC_FIELDS",
   HARMONIC_MOTION: "HARMONIC_MOTION",
   DATA_AND_GRAPHS: "DATA_AND_GRAPHS",
+  INFORMATION: "INFORMATION",
 };
 
 class Main extends Component {
@@ -69,6 +70,7 @@ class Main extends Component {
       this.setState({ x1: x1 });
       this.setState({ y1: y1 });
       this.setState({ time: Date.now() });
+      this.state.engine.updateMouse(x1, y1);
     }
   }
 
@@ -91,63 +93,55 @@ class Main extends Component {
         event.clientX - this.state.canvas.getBoundingClientRect().left;
       const mouseY =
         event.clientY - this.state.canvas.getBoundingClientRect().top;
-      this.state.engine.updateMouse(mouseX, mouseY);
+      console.log(mouseX);
+      this.state.engine.updateMouse(
+        mouseX || this.state.x1,
+        mouseY || this.state.y1
+      );
     }
   }
 
   render() {
     return (
       <>
-        <HeaderMenu />
-        <div id="container">
-          <Container>
-            <center>
-              <div id="sidebar">
-                <span>
-                  <Button
-                    content="Play"
-                    size="tiny"
-                    icon="play"
-                    labelPosition="left"
-                    onClick={this.play}
-                  />
-                  <Button
-                    content="Pause"
-                    size="tiny"
-                    icon="pause"
-                    labelPosition="left"
-                    onClick={this.stop}
-                  />
-                  <Button
-                    content="Reset"
-                    size="tiny"
-                    icon="redo"
-                    labelPosition="left"
-                  />
-                </span>
-                <EnvironmentalConditions></EnvironmentalConditions>
-              </div>
-            </center>
-            <canvas
-              height="600px"
-              width="1000px"
-              id="canvas"
-              onMouseDown={(event) => {
-                this.handleMouseDown(event);
-              }}
-              onMouseUp={(event) => {
-                this.handleMouseUp(event);
-              }}
-              onMouseMove={(event) => {
-                this.handleMouseMove(event);
-              }}
-            />
-
-            <div id="console">
-              {this.state.engine ? this.state.engine.data() : null}
+        <center>
+          <div id="content">
+            <HeaderMenu />
+            <div id="container">
+              <Container>
+                <center>
+                  <div class="ui blue inverted segment" id="sidebar">
+                    <span>
+                      <EnvironmentalConditions></EnvironmentalConditions>
+                      <Button.Group>
+                        <Button icon="play" onClick={this.play} />
+                        <Button icon="pause" onClick={this.stop} />
+                        <Button icon="redo" />
+                      </Button.Group>
+                    </span>
+                  </div>
+                </center>
+                <canvas
+                  height="600px"
+                  width="800px"
+                  id="canvas"
+                  onMouseDown={(event) => {
+                    this.handleMouseDown(event);
+                  }}
+                  onMouseUp={(event) => {
+                    this.handleMouseUp(event);
+                  }}
+                  onMouseMove={(event) => {
+                    this.handleMouseMove(event);
+                  }}
+                />
+                <div id="console">
+                  <h3> Graphing Console </h3>
+                </div>
+              </Container>
             </div>
-          </Container>
-        </div>
+          </div>
+        </center>
       </>
     );
   }

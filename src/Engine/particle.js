@@ -22,7 +22,7 @@ export default class Particle {
     this.xVel = 0;
 
     //collision information
-    this.cor = 0.2;
+    this.cor = 0.5;
     this.cof = 0.2;
 
     //interactivity information
@@ -47,6 +47,7 @@ export default class Particle {
 
   select() {
     this.selected ? (this.selected = false) : (this.selected = true);
+    this.selected ? (this.colour = "white") : (this.colour = "red");
   }
 
   throw(x1, x2, y1, y2, time) {

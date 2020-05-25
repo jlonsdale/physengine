@@ -26,7 +26,6 @@ export default class Engine {
   }
 
   handleThrow(x1, x2, y1, y2, time) {
-    console.log("here");
     this.particle.throw(x1, x2, y1, y2, time);
   }
 
