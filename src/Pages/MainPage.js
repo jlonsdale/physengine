@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Segment } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import "./style.css";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
@@ -22,17 +22,40 @@ class Main extends Component {
     x1: null,
     y1: null,
     time: null,
+    spacePressed: false,
     menu: "environmentalConditions",
   };
+
   componentDidMount() {
+    document.addEventListener("keydown", this.spaceDown, false);
+    document.addEventListener("keyup", this.spaceUp, false);
+
     const canvas = document.getElementById("canvas");
-    this.setState({ canvas: canvas });
     const ctx = canvas.getContext("2d");
     const engine = new Engine(ctx, canvas.height, canvas.width);
-    this.setState({ engine: engine });
     const interval = setInterval(this.draw, 1);
+
+    this.setState({ canvas: canvas });
+    this.setState({ engine: engine });
     this.setState({ interval: interval });
   }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.spaceDown, false);
+    document.removeEventListener("keyup", this.spaceUp, false);
+  }
+
+  spaceDown = (event) => {
+    if (event.keyCode === 32) {
+      this.setState({ spacePressed: true });
+    }
+  };
+
+  spaceUp = (event) => {
+    if (event.keyCode === 32) {
+      this.setState({ spacePressed: false });
+    }
+  };
 
   updateMenu = (type) => {
     this.setState = { menu: type };
@@ -77,7 +100,7 @@ class Main extends Component {
   handleMouseUp(event) {
     const y2 = event.clientY - this.state.canvas.getBoundingClientRect().top;
     const x2 = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    if (this.state.x1 && this.state.y1 && this.state.time) {
+    if (this.state.spacePressed) {
       const time = Math.abs(this.state.time - Date.now()) / 1000;
       this.state.engine.handleThrow(this.state.x1, x2, this.state.y1, y2, time);
       this.setState({ x1: null });
@@ -87,13 +110,11 @@ class Main extends Component {
   }
 
   handleMouseMove(event) {
-    console.log(this.state.engine.particle.selected);
     if (this.state.engine && this.state.engine.particle.selected) {
       const mouseX =
         event.clientX - this.state.canvas.getBoundingClientRect().left;
       const mouseY =
         event.clientY - this.state.canvas.getBoundingClientRect().top;
-      console.log(mouseX);
       this.state.engine.updateMouse(
         mouseX || this.state.x1,
         mouseY || this.state.y1
@@ -110,7 +131,7 @@ class Main extends Component {
             <div id="container">
               <Container>
                 <center>
-                  <div class="ui blue inverted segment" id="sidebar">
+                  <div className="ui blue inverted segment" id="sidebar">
                     <span>
                       <EnvironmentalConditions></EnvironmentalConditions>
                       <Button.Group>

@@ -58,6 +58,14 @@ export default class Particle {
     this.yVel = (y2 - y1) / time;
   }
 
+  drop(x1, y1) {
+    this.select();
+    this.xPos = x1;
+    this.yPos = y1;
+    this.xVel = 0;
+    this.yVel = 0;
+  }
+
   friction(v) {
     switch (v) {
       case v === 0:
