@@ -21,20 +21,24 @@ class Main extends Component {
     interval: null,
     x1: null,
     y1: null,
+    x2: null,
+    y2: null,
+    mouseX: null,
+    mouseY: null,
     time: null,
     spacePressed: false,
     menu: "environmentalConditions",
   };
 
   componentDidMount() {
+    console.log(this.state);
+
     document.addEventListener("keydown", this.spaceDown, false);
     document.addEventListener("keyup", this.spaceUp, false);
-
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const engine = new Engine(ctx, canvas.height, canvas.width);
     const interval = setInterval(this.draw, 1);
-
     this.setState({ canvas: canvas });
     this.setState({ engine: engine });
     this.setState({ interval: interval });
@@ -46,14 +50,31 @@ class Main extends Component {
   }
 
   spaceDown = (event) => {
-    if (event.keyCode === 32) {
-      this.setState({ spacePressed: true });
+    if (this.className === "hold") {
+      return false;
+    }
+    this.className = "hold";
+    this.setState({ spacePressed: true });
+    if (this.state.engine.particle.selected) {
+      if (event.keyCode === 32) {
+        this.setState({
+          x1: this.state.mouseX.valueOf() || this.state.x1.valueOf(),
+        });
+        this.setState({
+          y1: this.state.mouseY.valueOf() || this.state.y1.valueOf(),
+        });
+      }
     }
   };
 
   spaceUp = (event) => {
-    if (event.keyCode === 32) {
-      this.setState({ spacePressed: false });
+    this.className = "";
+    this.setState({ spacePressed: false });
+    if (this.state.engine.particle.selected) {
+      if (event.keyCode === 32) {
+        this.setState({ x2: this.state.mouseX.valueOf() });
+        this.setState({ y2: this.state.mouseY.valueOf() });
+      }
     }
   };
 
@@ -81,44 +102,54 @@ class Main extends Component {
   play = () => {
     //prevents intervals from stacking
     clearInterval(this.state.interval);
-
     const interval = setInterval(this.draw, 1);
     this.setState({ interval: interval });
   };
 
   handleMouseDown(event) {
-    const y1 = event.clientY - this.state.canvas.getBoundingClientRect().top;
-    const x1 = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    if (this.state.engine.isWithinBounds(x1, y1)) {
-      this.setState({ x1: x1 });
-      this.setState({ y1: y1 });
-      this.setState({ time: Date.now() });
-      this.state.engine.updateMouse(x1, y1);
+    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
+    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
+    if (this.state.engine.isWithinBounds(x, y)) {
+      this.setState({ mouseX: x.valueOf() });
+      this.setState({ mouseY: y.valueOf() });
+      this.setState({ x1: x.valueOf() });
+      this.setState({ y1: y.valueOf() });
+      this.state.engine.handleSelect();
+      this.state.engine.updateMouse(x, y);
     }
   }
 
   handleMouseUp(event) {
-    const y2 = event.clientY - this.state.canvas.getBoundingClientRect().top;
-    const x2 = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    if (this.state.spacePressed) {
-      const time = Math.abs(this.state.time - Date.now()) / 1000;
-      this.state.engine.handleThrow(this.state.x1, x2, this.state.y1, y2, time);
+    if (this.state.engine.particle.selected) {
+      if (this.state.x1 && this.state.y1 && this.state.x2 && this.state.y2) {
+        this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
+      } else {
+        this.state.engine.particle.throw(this.state.mouseX, this.state.mouseY);
+      }
       this.setState({ x1: null });
       this.setState({ y1: null });
-      this.setState({ time: null });
+      this.setState({ x2: null });
+      this.setState({ y2: null });
+      this.setState({ mouseX: null });
+      this.setState({ mouseY: null });
     }
   }
 
   handleMouseMove(event) {
-    if (this.state.engine && this.state.engine.particle.selected) {
+    console.log(this.state.x1);
+    if (this.state.engine.particle.selected) {
       const mouseX =
         event.clientX - this.state.canvas.getBoundingClientRect().left;
       const mouseY =
         event.clientY - this.state.canvas.getBoundingClientRect().top;
-      this.state.engine.updateMouse(
-        mouseX || this.state.x1,
-        mouseY || this.state.y1
-      );
+      this.setState({ mouseX: mouseX });
+      this.setState({ mouseY: mouseY });
+      console.log(this.state.x1);
+      if (!this.state.spacePressed) {
+        this.state.engine.updateMouse(mouseX, mouseY);
+      } else {
+        this.state.engine.updateMouse(this.state.x1, this.state.y1);
+      }
     }
   }
 

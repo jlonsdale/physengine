@@ -50,12 +50,12 @@ export default class Particle {
     this.selected ? (this.colour = "white") : (this.colour = "red");
   }
 
-  throw(x1, x2, y1, y2, time) {
+  throw(x1, x2, y1, y2) {
     this.select();
     this.xPos = x2;
     this.yPos = y2;
-    this.xVel = (x2 - x1) / time;
-    this.yVel = (y2 - y1) / time;
+    this.xVel = x1 - x2;
+    this.yVel = y1 - y2;
   }
 
   drop(x1, y1) {

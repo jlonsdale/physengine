@@ -21,12 +21,15 @@ export default class Engine {
         (this.particle.xPos - x) * (this.particle.xPos - x) +
           (this.particle.yPos - y) * (this.particle.yPos - y)
       ) < this.particle.radius;
-    if (inBounds) this.particle.select();
     return inBounds;
   }
 
-  handleThrow(x1, x2, y1, y2, time) {
-    this.particle.throw(x1, x2, y1, y2, time);
+  handleSelect() {
+    this.particle.select();
+  }
+
+  handleThrow(x1, x2, y1, y2) {
+    this.particle.throw(x1, x2, y1, y2);
   }
 
   draw() {
