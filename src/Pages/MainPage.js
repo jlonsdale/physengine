@@ -32,7 +32,6 @@ class Main extends Component {
 
   componentDidMount() {
     console.log(this.state);
-
     document.addEventListener("keydown", this.spaceDown, false);
     document.addEventListener("keyup", this.spaceUp, false);
     const canvas = document.getElementById("canvas");
@@ -121,10 +120,16 @@ class Main extends Component {
 
   handleMouseUp(event) {
     if (this.state.engine.particle.selected) {
-      if (this.state.x1 && this.state.y1 && this.state.x2 && this.state.y2) {
-        this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
+      if (this.state.x2 && this.state.y2) {
+        console.log("here");
+        this.state.engine.particle.throw(
+          this.state.x2,
+          this.state.x1,
+          this.state.y2,
+          this.state.y1
+        );
       } else {
-        this.state.engine.particle.throw(this.state.mouseX, this.state.mouseY);
+        this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
       }
       this.setState({ x1: null });
       this.setState({ y1: null });
@@ -136,7 +141,6 @@ class Main extends Component {
   }
 
   handleMouseMove(event) {
-    console.log(this.state.x1);
     if (this.state.engine.particle.selected) {
       const mouseX =
         event.clientX - this.state.canvas.getBoundingClientRect().left;
@@ -144,7 +148,6 @@ class Main extends Component {
         event.clientY - this.state.canvas.getBoundingClientRect().top;
       this.setState({ mouseX: mouseX });
       this.setState({ mouseY: mouseY });
-      console.log(this.state.x1);
       if (!this.state.spacePressed) {
         this.state.engine.updateMouse(mouseX, mouseY);
       } else {
