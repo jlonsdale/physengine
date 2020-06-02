@@ -85,6 +85,7 @@ class Main extends Component {
     let engine = this.state.engine;
     engine.draw();
     this.setState({ engine: engine });
+    engine.controlState = this.state;
     this.handleStop();
   };
 
@@ -152,12 +153,6 @@ class Main extends Component {
         this.state.engine.updateMouse(mouseX, mouseY);
       } else {
         this.state.engine.updateMouse(this.state.x1, this.state.y1);
-        this.state.engine.handleArrow(
-          this.state.x1,
-          this.state.y1,
-          mouseX,
-          mouseY
-        );
       }
     }
   }

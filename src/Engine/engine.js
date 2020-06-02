@@ -2,6 +2,7 @@ import Particle from "./particle.js";
 
 export default class Engine {
   constructor(ctx, height, width) {
+    this.controlState = null;
     this.ctx = ctx;
     this.height = height;
     this.width = width;
@@ -18,8 +19,8 @@ export default class Engine {
 
   canvasArrow = (ctx, x1, y1, x2, y2) => {
     ctx.beginPath();
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = "#FF0000";
+    ctx.strokeStyle = "#ff0000";
+
     var headlen = 10;
     var dx = x2 - x1;
     var dy = y2 - y1;
@@ -54,13 +55,18 @@ export default class Engine {
   handleThrow(x1, x2, y1, y2) {
     this.particle.throw(x1, x2, y1, y2);
   }
-
-  handleArrow(x1, y1, x2, y2) {
-    this.canvasArrow(this.ctx, x1, y1, x2, y2);
-  }
-
   draw() {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
+    if (this.controlState && this.controlState.spacePressed) {
+      console.log(this.controlState.mouseX);
+      this.canvasArrow(
+        this.ctx,
+        this.controlState.x1,
+        this.controlState.y1,
+        this.controlState.mouseX,
+        this.controlState.mouseY
+      );
+    }
     this.particle.calculateKinematics();
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
   }
