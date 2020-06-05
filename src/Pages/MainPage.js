@@ -25,7 +25,6 @@ class Main extends Component {
     y2: null,
     mouseX: null,
     mouseY: null,
-    time: null,
     spacePressed: false,
     menu: "environmentalConditions",
   };
@@ -83,9 +82,15 @@ class Main extends Component {
 
   draw = () => {
     let engine = this.state.engine;
-    engine.draw();
+    engine.engineViewState = {
+      x1: this.state.x1,
+      y1: this.state.y1,
+      mouseX: this.state.mouseX,
+      mouseY: this.state.mouseY,
+      spacePressed: this.state.spacePressed,
+    };
     this.setState({ engine: engine });
-    engine.controlState = this.state;
+    engine.draw();
     this.handleStop();
   };
 
@@ -115,14 +120,12 @@ class Main extends Component {
       this.setState({ x1: x.valueOf() });
       this.setState({ y1: y.valueOf() });
       this.state.engine.handleSelect();
-      this.state.engine.updateMouse(x, y);
     }
   }
 
   handleMouseUp(event) {
     if (this.state.engine.particle.selected) {
       if (this.state.x2 && this.state.y2) {
-        console.log("here");
         this.state.engine.particle.throw(
           this.state.x2,
           this.state.x1,
@@ -149,11 +152,6 @@ class Main extends Component {
         event.clientY - this.state.canvas.getBoundingClientRect().top;
       this.setState({ mouseX: mouseX });
       this.setState({ mouseY: mouseY });
-      if (!this.state.spacePressed) {
-        this.state.engine.updateMouse(mouseX, mouseY);
-      } else {
-        this.state.engine.updateMouse(this.state.x1, this.state.y1);
-      }
     }
   }
 

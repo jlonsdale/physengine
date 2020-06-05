@@ -2,19 +2,12 @@ import Particle from "./particle.js";
 
 export default class Engine {
   constructor(ctx, height, width) {
-    this.controlState = null;
+    this.engineViewState = null;
     this.ctx = ctx;
     this.height = height;
     this.width = width;
     this.particle = new Particle(width / 2, 200, "red", height, width);
-    this.xMouse = null;
-    this.yMouse = null;
     this.arrow = false;
-  }
-
-  updateMouse(x, y) {
-    this.xMouse = x;
-    this.yMouse = y;
   }
 
   canvasArrow = (ctx, x1, y1, x2, y2) => {
@@ -57,14 +50,13 @@ export default class Engine {
   }
   draw() {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
-    if (this.controlState && this.controlState.spacePressed) {
-      console.log(this.controlState.mouseX);
+    if (this.engineViewState && this.engineViewState.spacePressed) {
       this.canvasArrow(
         this.ctx,
-        this.controlState.x1,
-        this.controlState.y1,
-        this.controlState.mouseX,
-        this.controlState.mouseY
+        this.engineViewState.x1,
+        this.engineViewState.y1,
+        this.engineViewState.mouseX,
+        this.engineViewState.mouseY
       );
     }
     this.particle.calculateKinematics();
@@ -73,9 +65,26 @@ export default class Engine {
 
   drawBall(ctx, x, y) {
     ctx.beginPath();
-    this.particle.selected
-      ? ctx.arc(this.xMouse, this.yMouse, this.particle.radius, 0, Math.PI * 2)
-      : ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
+    const engineViewState = this.engineViewState;
+    if (this.particle.selected) {
+      !engineViewState.spacePressed
+        ? ctx.arc(
+            engineViewState.xMouse,
+            engineViewState.yMouse,
+            this.particle.radius,
+            0,
+            Math.PI * 2
+          )
+        : ctx.arc(
+            engineViewState.x1,
+            engineViewState.y1,
+            this.particle.radius,
+            0,
+            Math.PI * 2
+          );
+    } else {
+      ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
+    }
     ctx.fillStyle = this.particle.colour;
     ctx.fill();
     ctx.closePath();
