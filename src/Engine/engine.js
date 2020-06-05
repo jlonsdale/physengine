@@ -67,10 +67,11 @@ export default class Engine {
     ctx.beginPath();
     const engineViewState = this.engineViewState;
     if (this.particle.selected) {
+      console.log(engineViewState.mouseX);
       !engineViewState.spacePressed
         ? ctx.arc(
-            engineViewState.xMouse,
-            engineViewState.yMouse,
+            engineViewState.mouseX,
+            engineViewState.mouseY,
             this.particle.radius,
             0,
             Math.PI * 2
