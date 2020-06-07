@@ -23,7 +23,8 @@ export default class Particle {
 
     //collision information
     this.cor = 0.5;
-    this.cof = 0.2;
+    this.airResistance = 0.2;
+    this.cof = 0.5;
 
     //interactivity information
     this.selected = false;
@@ -32,7 +33,7 @@ export default class Particle {
   yForce() {
     const mass = this.mass;
     let normalForce = this.yPos + this.radius > this.height ? mass * this.g : 0;
-    let friction = this.friction(this.yVel);
+    let friction = this.friction(this.yVel, this.airResistance);
     let gravity = mass * this.g;
     return function (x, v, dt) {
       return (gravity - normalForce + friction * v * v) / mass;
@@ -66,14 +67,14 @@ export default class Particle {
     this.yVel = 0;
   }
 
-  friction(v) {
+  friction(v, frictionalConstant) {
     switch (v) {
       case v === 0:
         return 0;
       case v > 0:
-        return this.cof;
+        return frictionalConstant;
       default:
-        return -this.cof;
+        return -frictionalConstant;
     }
   }
 
