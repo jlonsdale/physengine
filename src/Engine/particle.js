@@ -98,10 +98,18 @@ export default class Particle {
         ? (this.yVel = -this.yVel * this.cor)
         : (this.yVel = 0);
       this.yPos = this.height - this.radius;
-    } else if (this.yPos + this.radius > this.height) {
-      this.yPos = this.radius;
-      this.yVel = -this.yVel * this.cor;
-    } else {
+    }
+    if (this.xPos + this.radius > this.width) {
+      Math.abs(this.xVel / 100) > 0.5
+        ? (this.xVel = -this.xVel * this.cor)
+        : (this.xVel = 0);
+      this.xPos = this.width - this.radius;
+    }
+    if (this.xPos < this.radius) {
+      Math.abs(this.xVel / 100) > 0.5
+        ? (this.xVel = -this.xVel * this.cor)
+        : (this.xVel = 0);
+      this.xPos = this.radius;
     }
   }
 }
