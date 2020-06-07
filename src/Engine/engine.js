@@ -7,27 +7,25 @@ export default class Engine {
     this.height = height;
     this.width = width;
     this.particle = new Particle(width / 2, 200, "red", height, width);
-    this.arrow = false;
+    this.pendingThrow = false;
   }
 
   canvasArrow = (ctx, x1, y1, x2, y2) => {
     ctx.beginPath();
     ctx.strokeStyle = "#ff0000";
-
-    var headlen = 10;
-    var dx = x2 - x1;
-    var dy = y2 - y1;
-    var angle = Math.atan2(dy, dx);
+    const tipLength = 10;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.lineTo(
-      x2 - headlen * Math.cos(angle - Math.PI / 6),
-      y2 - headlen * Math.sin(angle - Math.PI / 6)
+      x2 - tipLength * Math.cos(Math.atan2(dy, dx) - Math.PI / 6),
+      y2 - tipLength * Math.sin(Math.atan2(dy, dx) - Math.PI / 6)
     );
     ctx.moveTo(x2, y2);
     ctx.lineTo(
-      x2 - headlen * Math.cos(angle + Math.PI / 6),
-      y2 - headlen * Math.sin(angle + Math.PI / 6)
+      x2 - tipLength * Math.cos(Math.atan2(dy, dx) + Math.PI / 6),
+      y2 - tipLength * Math.sin(Math.atan2(dy, dx) + Math.PI / 6)
     );
     ctx.stroke();
   };
@@ -45,9 +43,14 @@ export default class Engine {
     this.particle.select();
   }
 
+  togglePendingThrow(bool) {
+    this.pendingThrow = bool;
+  }
+
   handleThrow(x1, x2, y1, y2) {
     this.particle.throw(x1, x2, y1, y2);
   }
+
   draw() {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
     if (this.engineViewState && this.engineViewState.spacePressed) {
@@ -67,18 +70,17 @@ export default class Engine {
     ctx.beginPath();
     const engineViewState = this.engineViewState;
     if (this.particle.selected) {
-      console.log(engineViewState.mouseX);
-      !engineViewState.spacePressed
+      engineViewState.spacePressed | this.pendingThrow
         ? ctx.arc(
-            engineViewState.mouseX,
-            engineViewState.mouseY,
+            engineViewState.x1,
+            engineViewState.y1,
             this.particle.radius,
             0,
             Math.PI * 2
           )
         : ctx.arc(
-            engineViewState.x1,
-            engineViewState.y1,
+            engineViewState.mouseX,
+            engineViewState.mouseY,
             this.particle.radius,
             0,
             Math.PI * 2

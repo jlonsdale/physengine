@@ -30,12 +30,14 @@ class Main extends Component {
   };
 
   componentDidMount() {
-    console.log(this.state);
     document.addEventListener("keydown", this.spaceDown, false);
     document.addEventListener("keyup", this.spaceUp, false);
     const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    const engine = new Engine(ctx, canvas.height, canvas.width);
+    const engine = new Engine(
+      canvas.getContext("2d"),
+      canvas.height,
+      canvas.width
+    );
     const interval = setInterval(this.draw, 1);
     this.setState({ canvas: canvas });
     this.setState({ engine: engine });
@@ -55,6 +57,7 @@ class Main extends Component {
     this.setState({ spacePressed: true });
     if (this.state.engine.particle.selected) {
       if (event.keyCode === 32) {
+        this.state.engine.togglePendingThrow(true);
         this.setState({
           x1: this.state.mouseX.valueOf() || this.state.x1.valueOf(),
         });
@@ -66,10 +69,10 @@ class Main extends Component {
   };
 
   spaceUp = (event) => {
-    this.className = "";
-    this.setState({ spacePressed: false });
     if (this.state.engine.particle.selected) {
       if (event.keyCode === 32) {
+        this.className = "";
+        this.setState({ spacePressed: false });
         this.setState({ x2: this.state.mouseX.valueOf() });
         this.setState({ y2: this.state.mouseY.valueOf() });
       }
@@ -125,6 +128,7 @@ class Main extends Component {
 
   handleMouseUp(event) {
     if (this.state.engine.particle.selected) {
+      this.state.engine.togglePendingThrow(false);
       if (this.state.x2 && this.state.y2) {
         this.state.engine.particle.throw(
           this.state.x2,
