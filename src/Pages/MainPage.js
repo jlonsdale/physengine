@@ -69,10 +69,10 @@ class Main extends Component {
   };
 
   spaceUp = (event) => {
+    this.className = "";
+    this.setState({ spacePressed: false });
     if (this.state.engine.particle.selected) {
       if (event.keyCode === 32) {
-        this.className = "";
-        this.setState({ spacePressed: false });
         this.setState({ x2: this.state.mouseX.valueOf() });
         this.setState({ y2: this.state.mouseY.valueOf() });
       }
@@ -127,8 +127,9 @@ class Main extends Component {
   }
 
   handleMouseUp(event) {
+    this.state.engine.togglePendingThrow(false);
+
     if (this.state.engine.particle.selected) {
-      this.state.engine.togglePendingThrow(false);
       if (this.state.x2 && this.state.y2) {
         this.state.engine.particle.throw(
           this.state.x2,
@@ -145,6 +146,7 @@ class Main extends Component {
       this.setState({ y2: null });
       this.setState({ mouseX: null });
       this.setState({ mouseY: null });
+      this.setState({ spacePressed: false });
     }
   }
 

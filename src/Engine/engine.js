@@ -40,6 +40,7 @@ export default class Engine {
   }
 
   handleSelect() {
+    this.togglePendingThrow(false);
     this.particle.select();
   }
 
@@ -52,6 +53,7 @@ export default class Engine {
   }
 
   draw() {
+    console.log(this.engineViewState, this.pendingThrow);
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
     if (this.engineViewState && this.engineViewState.spacePressed) {
       this.canvasArrow(
