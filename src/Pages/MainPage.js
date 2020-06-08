@@ -54,8 +54,9 @@ class Main extends Component {
       return false;
     }
     this.className = "hold";
-    this.setState({ spacePressed: true });
     if (this.state.engine.particle.selected) {
+      this.setState({ spacePressed: true });
+
       if (event.keyCode === 32) {
         this.state.engine.togglePendingThrow(true);
         this.setState({
@@ -128,7 +129,6 @@ class Main extends Component {
 
   handleMouseUp(event) {
     this.state.engine.togglePendingThrow(false);
-
     if (this.state.engine.particle.selected) {
       if (this.state.x2 && this.state.y2) {
         this.state.engine.particle.throw(
