@@ -171,8 +171,8 @@ class Main extends Component {
               <Container>
                 <center>
                   <div className="ui blue inverted segment" id="sidebar">
+                    <EnvironmentalConditions></EnvironmentalConditions>
                     <span>
-                      <EnvironmentalConditions></EnvironmentalConditions>
                       <Button.Group>
                         <Button icon="play" onClick={this.play} />
                         <Button icon="pause" onClick={this.stop} />

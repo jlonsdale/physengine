@@ -71,7 +71,7 @@ export default class Engine {
     ctx.beginPath();
     const engineViewState = this.engineViewState;
     if (this.particle.selected) {
-      engineViewState.spacePressed | this.pendingThrow
+      engineViewState.spacePressed || this.pendingThrow
         ? ctx.arc(
             engineViewState.x1,
             engineViewState.y1,
