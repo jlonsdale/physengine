@@ -19,13 +19,16 @@ class Main extends Component {
     canvas: null,
     engine: null,
     interval: null,
+
     x1: null,
     y1: null,
     x2: null,
     y2: null,
     mouseX: null,
     mouseY: null,
+
     spacePressed: false,
+    stopped: false,
     menu: "environmentalConditions",
   };
 
@@ -50,32 +53,35 @@ class Main extends Component {
   }
 
   spaceDown = (event) => {
-    if (this.className === "hold") {
-      return false;
-    }
-    this.className = "hold";
-    if (this.state.engine.particle.selected) {
-      this.setState({ spacePressed: true });
-
-      if (event.keyCode === 32) {
-        this.state.engine.togglePendingThrow(true);
-        this.setState({
-          x1: this.state.mouseX.valueOf() || this.state.x1.valueOf(),
-        });
-        this.setState({
-          y1: this.state.mouseY.valueOf() || this.state.y1.valueOf(),
-        });
+    if (!this.state.stopped) {
+      if (this.className === "hold") {
+        return false;
+      }
+      this.className = "hold";
+      if (this.state.engine.particle.selected) {
+        this.setState({ spacePressed: true });
+        if (event.keyCode === 32) {
+          this.state.engine.togglePendingThrow(true);
+          this.setState({
+            x1: this.state.mouseX.valueOf() || this.state.x1.valueOf(),
+          });
+          this.setState({
+            y1: this.state.mouseY.valueOf() || this.state.y1.valueOf(),
+          });
+        }
       }
     }
   };
 
   spaceUp = (event) => {
-    this.className = "";
-    this.setState({ spacePressed: false });
-    if (this.state.engine.particle.selected) {
-      if (event.keyCode === 32) {
-        this.setState({ x2: this.state.mouseX.valueOf() });
-        this.setState({ y2: this.state.mouseY.valueOf() });
+    if (!this.state.stopped) {
+      this.className = "";
+      this.setState({ spacePressed: false });
+      if (this.state.engine.particle.selected) {
+        if (event.keyCode === 32) {
+          this.setState({ x2: this.state.mouseX.valueOf() });
+          this.setState({ y2: this.state.mouseY.valueOf() });
+        }
       }
     }
   };
@@ -105,10 +111,12 @@ class Main extends Component {
   };
 
   stop = () => {
+    this.setState({ stopped: true });
     clearInterval(this.state.interval);
   };
 
   play = () => {
+    this.setState({ stopped: false });
     //prevents intervals from stacking
     clearInterval(this.state.interval);
     const interval = setInterval(this.draw, 1);
@@ -116,48 +124,54 @@ class Main extends Component {
   };
 
   handleMouseDown(event) {
-    const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
-    const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
-    if (this.state.engine.isWithinBounds(x, y)) {
-      this.setState({ mouseX: x.valueOf() });
-      this.setState({ mouseY: y.valueOf() });
-      this.setState({ x1: x.valueOf() });
-      this.setState({ y1: y.valueOf() });
-      this.state.engine.handleSelect();
+    if (!this.state.stopped) {
+      const x = event.clientX - this.state.canvas.getBoundingClientRect().left;
+      const y = event.clientY - this.state.canvas.getBoundingClientRect().top;
+      if (this.state.engine.isWithinBounds(x, y)) {
+        this.setState({ mouseX: x.valueOf() });
+        this.setState({ mouseY: y.valueOf() });
+        this.setState({ x1: x.valueOf() });
+        this.setState({ y1: y.valueOf() });
+        this.state.engine.handleSelect();
+      }
     }
   }
 
   handleMouseUp(event) {
-    this.state.engine.togglePendingThrow(false);
-    if (this.state.engine.particle.selected) {
-      if (this.state.x2 && this.state.y2) {
-        this.state.engine.particle.throw(
-          this.state.x2,
-          this.state.x1,
-          this.state.y2,
-          this.state.y1
-        );
-      } else {
-        this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
+    if (!this.state.stopped) {
+      this.state.engine.togglePendingThrow(false);
+      if (this.state.engine.particle.selected) {
+        if (this.state.x2 && this.state.y2) {
+          this.state.engine.particle.throw(
+            this.state.x2,
+            this.state.x1,
+            this.state.y2,
+            this.state.y1
+          );
+        } else {
+          this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
+        }
+        this.setState({ x1: null });
+        this.setState({ y1: null });
+        this.setState({ x2: null });
+        this.setState({ y2: null });
+        this.setState({ mouseX: null });
+        this.setState({ mouseY: null });
+        this.setState({ spacePressed: false });
       }
-      this.setState({ x1: null });
-      this.setState({ y1: null });
-      this.setState({ x2: null });
-      this.setState({ y2: null });
-      this.setState({ mouseX: null });
-      this.setState({ mouseY: null });
-      this.setState({ spacePressed: false });
     }
   }
 
   handleMouseMove(event) {
-    if (this.state.engine.particle.selected) {
-      const mouseX =
-        event.clientX - this.state.canvas.getBoundingClientRect().left;
-      const mouseY =
-        event.clientY - this.state.canvas.getBoundingClientRect().top;
-      this.setState({ mouseX: mouseX });
-      this.setState({ mouseY: mouseY });
+    if (!this.state.stopped) {
+      if (this.state.engine.particle.selected) {
+        const mouseX =
+          event.clientX - this.state.canvas.getBoundingClientRect().left;
+        const mouseY =
+          event.clientY - this.state.canvas.getBoundingClientRect().top;
+        this.setState({ mouseX: mouseX });
+        this.setState({ mouseY: mouseY });
+      }
     }
   }
 
@@ -176,7 +190,6 @@ class Main extends Component {
                       <Button.Group>
                         <Button icon="play" onClick={this.play} />
                         <Button icon="pause" onClick={this.stop} />
-                        <Button icon="redo" />
                       </Button.Group>
                     </span>
                   </div>

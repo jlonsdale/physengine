@@ -68,7 +68,6 @@ export default class Engine {
   }
 
   drawBall(ctx, x, y) {
-    console.log(this.pendingThrow);
     ctx.beginPath();
     const engineViewState = this.engineViewState;
     if (this.particle.selected) {
