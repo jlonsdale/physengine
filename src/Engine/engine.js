@@ -71,16 +71,15 @@ export default class Engine {
   updateEnvConditions(type, val) {
     switch (type) {
       case "cof":
-        console.log("cof!!!");
+        this.particle.updateCof(val);
         break;
       case "cor":
-        console.log("cor!!!");
+        this.particle.updateCor(val);
         break;
       case "airRes":
-        console.log("air!!!");
+        this.particle.updateAirRes(val);
         break;
       default:
-      // code block
     }
   }
 

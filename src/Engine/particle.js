@@ -24,11 +24,23 @@ export default class Particle {
 
     //collision information
     this.cor = 0.3;
-    this.airResistance = 0.3;
+    this.airResistance = 0.1;
     this.cof = 0.3;
 
     //interactivity information
     this.selected = false;
+  }
+
+  updateCor(value) {
+    this.cor = value;
+  }
+
+  updateCof(value) {
+    this.cof = value;
+  }
+
+  updateAirRes(value) {
+    this.airResistance = value;
   }
 
   yForce() {

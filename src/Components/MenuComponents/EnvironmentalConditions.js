@@ -29,7 +29,7 @@ function EnvironmentalConditions({ engineState }) {
               max={0.8}
               name="duration"
               onChange={(e) => {
-                console.log(e.target.value);
+                engineState.updateEnvConditions("cof", e.target.value);
               }}
               step={0.05}
             />
@@ -37,11 +37,11 @@ function EnvironmentalConditions({ engineState }) {
             <input
               type="range"
               className="slider"
-              min={0.3}
-              max={0.8}
+              min={0.1}
+              max={0.9}
               name="duration"
               onChange={(e) => {
-                console.log(e.target.value);
+                engineState.updateEnvConditions("airRes", e.target.value);
               }}
               step={0.05}
             />
