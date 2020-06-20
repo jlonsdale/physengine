@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Form } from "semantic-ui-react";
+import React from "react";
 import "./../../Pages/style.css";
 
 function EnvironmentalConditions({ engineState }) {

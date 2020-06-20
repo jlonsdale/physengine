@@ -180,7 +180,14 @@ class Main extends Component {
         <center>
           <div id="content">
             <HeaderMenu />
-
+            <div class="ui info message">
+              <i class="close icon"></i>
+              <div class="header">
+                To give the particle force, click the ball and hold with left
+                mouse button, hold down space, drag the mouse in desired
+                direction, release space bar and then release the mouse.
+              </div>
+            </div>
             <div id="container">
               <Container>
                 <center>
