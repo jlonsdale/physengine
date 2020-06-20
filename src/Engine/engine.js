@@ -67,6 +67,23 @@ export default class Engine {
     this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
   }
 
+  //method to update env variables
+  updateEnvConditions(type, val) {
+    switch (type) {
+      case "cof":
+        console.log("cof!!!");
+        break;
+      case "cor":
+        console.log("cor!!!");
+        break;
+      case "airRes":
+        console.log("air!!!");
+        break;
+      default:
+      // code block
+    }
+  }
+
   drawBall(ctx, x, y) {
     ctx.beginPath();
     const engineViewState = this.engineViewState;

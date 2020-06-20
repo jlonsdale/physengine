@@ -174,18 +174,20 @@ class Main extends Component {
       }
     }
   }
-
   render() {
     return (
       <>
         <center>
           <div id="content">
             <HeaderMenu />
+
             <div id="container">
               <Container>
                 <center>
                   <div className="ui blue inverted segment" id="sidebar">
-                    <EnvironmentalConditions></EnvironmentalConditions>
+                    <EnvironmentalConditions
+                      engineState={this.state.engine ? this.state.engine : null}
+                    ></EnvironmentalConditions>
                     <span>
                       <Button.Group>
                         <Button icon="play" onClick={this.play} />
