@@ -25,7 +25,7 @@ export default class Particle {
     //collision information
     this.cor = 0.3;
     this.airResistance = 0.1;
-    this.cof = 0.3;
+    this.cof = 0.1;
 
     //interactivity information
     this.selected = false;
