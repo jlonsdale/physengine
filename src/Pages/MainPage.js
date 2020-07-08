@@ -30,6 +30,8 @@ class Main extends Component {
     spacePressed: false,
     stopped: false,
     menu: "environmentalConditions",
+
+    activeMenuItem: menuStates.ENVIROMENTAL_CONDITIONS,
   };
 
   componentDidMount() {
@@ -179,7 +181,13 @@ class Main extends Component {
       <>
         <center>
           <div id="content">
-            <HeaderMenu />
+            <HeaderMenu
+              activeItem={this.state.activeMenuItem}
+              menuStates={menuStates}
+              setActiveItem={(item) => {
+                this.setState({ activeMenuItem: item });
+              }}
+            />
             <div class="ui info message">
               <i class="close icon"></i>
               <div class="header">
