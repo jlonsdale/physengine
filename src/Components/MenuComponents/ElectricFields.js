@@ -11,6 +11,10 @@ function ElectricFields({ engineState }) {
   return (
     <div>
       <h2> Electric Fields </h2>
+
+      <h4>Activate</h4>
+      <Radio toggle color="red" />
+
       <div className="sliderContainer">
         <h4>Particle Charge</h4>
         <Form>
@@ -33,7 +37,6 @@ function ElectricFields({ engineState }) {
             />
           </Form.Field>
         </Form>
-        <br />
         <h4>Electric Field Strength</h4>
         <input
           type="range"
