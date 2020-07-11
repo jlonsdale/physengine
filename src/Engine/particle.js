@@ -29,6 +29,12 @@ export default class Particle {
 
     //interactivity information
     this.selected = false;
+
+    //electric fields
+    this.electricField = false;
+    this.eStrength = 0;
+    this.ePositiveBar = { x1: 0, y1: 0, x2: 0, y2: 0 };
+    this.eNegativeBar = { x1: 0, y1: 0, x2: 0, y2: 0 };
   }
 
   updateCor(value) {

@@ -5,6 +5,7 @@ import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
 import Engine from "../Engine/engine.js";
 import { EnvironmentalConditions } from "../Components/MenuComponents";
+import ElectricFields from "../Components/MenuComponents/ElectricFields";
 
 const menuStates = {
   ENVIROMENTAL_CONDITIONS: "ENVIROMENTAL_CONDITIONS",
@@ -29,9 +30,8 @@ class Main extends Component {
 
     spacePressed: false,
     stopped: false,
-    menu: "environmentalConditions",
 
-    activeMenuItem: menuStates.ENVIROMENTAL_CONDITIONS,
+    activeMenuItem: menuStates.ELECTRIC_FIELDS,
   };
 
   componentDidMount() {
@@ -199,10 +199,27 @@ class Main extends Component {
             <div id="container">
               <Container>
                 <center>
-                  <div className="ui blue inverted segment" id="sidebar">
-                    <EnvironmentalConditions
-                      engineState={this.state.engine ? this.state.engine : null}
-                    ></EnvironmentalConditions>
+                  <div id="sidebar" className="ui segment">
+                    {this.state.activeMenuItem ===
+                    menuStates.ENVIROMENTAL_CONDITIONS ? (
+                      <div className="ui blue inverted segment">
+                        <EnvironmentalConditions
+                          engineState={
+                            this.state.engine ? this.state.engine : null
+                          }
+                        ></EnvironmentalConditions>
+                      </div>
+                    ) : null}
+                    {this.state.activeMenuItem ===
+                    menuStates.ELECTRIC_FIELDS ? (
+                      <div className="ui yellow inverted segment">
+                        <ElectricFields
+                          engineState={
+                            this.state.engine ? this.state.engine : null
+                          }
+                        ></ElectricFields>
+                      </div>
+                    ) : null}
                     <span>
                       <Button.Group>
                         <Button icon="play" onClick={this.play} />
