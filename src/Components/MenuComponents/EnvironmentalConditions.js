@@ -4,11 +4,11 @@ import "./../../Pages/style.css";
 function EnvironmentalConditions({ engineState }) {
   return (
     <div>
-      <h3> Environmental Conditions </h3>
+      <h2> Environmental Conditions </h2>
       <div className="sliderContainer">
         {engineState ? (
           <>
-            <div>coefficient of restitution</div>
+            <h4>Coefficient of Restitution</h4>
             <input
               type="range"
               className="slider"
@@ -20,7 +20,7 @@ function EnvironmentalConditions({ engineState }) {
               }}
               step={0.05}
             />
-            <div>frictional constant (floor resistance) </div>
+            <h4>Frictional Constant (Floor Resistance) </h4>
             <input
               type="range"
               className="slider"
@@ -32,7 +32,7 @@ function EnvironmentalConditions({ engineState }) {
               }}
               step={0.05}
             />
-            <div>frictional constant (air resistance) </div>
+            <h4>Frictional Constant (Air Resistance) </h4>
             <input
               type="range"
               className="slider"
