@@ -3,6 +3,8 @@
 
 - my first physics engine (link https://github.com/jlonsdale/physics_engine.io) was purely based around velocity, this meant it could not handle variable acceleration)
 
+- my second engine involved collisions but was also base on velocity (https://github.com/jlonsdale/pool_table.io)
+
 - this engine is based around the vector sum of forces acting on the ball & performs an integral approximation on this sum to get kinematic values each frame.
 - we are using the Runge-Kutta method https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods to approximate said integrals.
 
