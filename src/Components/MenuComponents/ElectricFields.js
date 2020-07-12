@@ -1,33 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Radio } from "semantic-ui-react";
 import "./../../Pages/style.css";
 
 function ElectricFields({ engineState }) {
-  const [charge, setCharge] = useState(0);
-  const [active, setActive] = useState(false);
+  const charge = engineState ? engineState.particleCharge : null;
+  const activeState = engineState ? engineState.electricFieldActive : null;
 
   const handleChange = (e, { value }) => {
-    setCharge(value);
+    engineState.updateCharge(value);
   };
 
-  const handleToggle = (value) => {
-    setActive(value);
+  const handleToggle = (value, charge) => {
+    engineState.toggleElectricField(value, charge);
+    console.log(engineState.particleCharge);
   };
 
   return (
     <div>
       <h2> Electric Fields </h2>
-
       <h4>Activate</h4>
       <Radio
         toggle
         value={true}
         onChange={() => {
-          handleToggle(!active);
+          handleToggle(!activeState);
         }}
       />
 
-      {active ? (
+      {activeState ? (
         <div className="sliderContainer">
           <h4>Particle Charge</h4>
           <Form>
@@ -35,8 +35,8 @@ function ElectricFields({ engineState }) {
               <Radio
                 label="Positive Charge"
                 name="radioGroup"
-                value={0}
-                checked={charge === 0}
+                value={1}
+                checked={charge === 1}
                 onChange={handleChange}
               />
             </Form.Field>
@@ -44,8 +44,8 @@ function ElectricFields({ engineState }) {
               <Radio
                 label="Negative Charge"
                 name="radioGroup"
-                value={1}
-                checked={charge === 1}
+                value={-1}
+                checked={charge === -1}
                 onChange={handleChange}
               />
             </Form.Field>

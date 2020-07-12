@@ -3,11 +3,29 @@ import Particle from "./particle.js";
 export default class Engine {
   constructor(ctx, height, width) {
     this.engineViewState = null;
+    this.pendingThrow = false;
+
     this.ctx = ctx;
+
     this.height = height;
     this.width = width;
+
     this.particle = new Particle(width / 2, 200, "red", height, width);
-    this.pendingThrow = false;
+
+    this.electricFieldActive = false;
+    this.particleCharge = 1;
+  }
+
+  //////////////////////
+  /// electric field ///
+  //////////////////////
+
+  toggleElectricField(bool) {
+    this.electricFieldActive = bool;
+  }
+
+  updateCharge(charge) {
+    this.particleCharge = charge;
   }
 
   canvasArrow = (ctx, x1, y1, x2, y2) => {
@@ -47,7 +65,6 @@ export default class Engine {
   togglePendingThrow(bool) {
     this.pendingThrow = bool;
   }
-
   handleThrow(x1, x2, y1, y2) {
     this.particle.throw(x1, x2, y1, y2);
   }
@@ -108,5 +125,20 @@ export default class Engine {
     ctx.fillStyle = this.particle.colour;
     ctx.fill();
     ctx.closePath();
+    if (this.electricFieldActive && !this.particle.selected) {
+      ctx.fillStyle = "yellow";
+      ctx.font = "30px Arial";
+      this.particleCharge === 1
+        ? ctx.fillText(
+            "-",
+            x - 0.6 * this.particle.radius,
+            y + 0.8 * this.particle.radius
+          )
+        : ctx.fillText(
+            "+",
+            x - 0.9 * this.particle.radius,
+            y + 1 * this.particle.radius
+          );
+    }
   }
 }

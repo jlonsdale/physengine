@@ -212,7 +212,7 @@ class Main extends Component {
                     ) : null}
                     {this.state.activeMenuItem ===
                     menuStates.ELECTRIC_FIELDS ? (
-                      <div className="ui yellow inverted segment">
+                      <div className="ui orange inverted segment">
                         <ElectricFields
                           engineState={
                             this.state.engine ? this.state.engine : null
