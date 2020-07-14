@@ -34,6 +34,16 @@ class Main extends Component {
     activeMenuItem: menuStates.ELECTRIC_FIELDS,
   };
 
+  nullThrowStates() {
+    this.setState({ x1: null });
+    this.setState({ y1: null });
+    this.setState({ x2: null });
+    this.setState({ y2: null });
+    this.setState({ mouseX: null });
+    this.setState({ mouseY: null });
+    this.setState({ spacePressed: false });
+  }
+
   componentDidMount() {
     document.addEventListener("keydown", this.spaceDown, false);
     document.addEventListener("keyup", this.spaceUp, false);
@@ -83,6 +93,13 @@ class Main extends Component {
         if (event.keyCode === 32) {
           this.setState({ x2: this.state.mouseX.valueOf() });
           this.setState({ y2: this.state.mouseY.valueOf() });
+          this.state.engine.particle.throw(
+            this.state.x2,
+            this.state.x1,
+            this.state.y2,
+            this.state.y1
+          );
+          this.nullThrowStates();
         }
       }
     }
@@ -144,22 +161,10 @@ class Main extends Component {
       this.state.engine.togglePendingThrow(false);
       if (this.state.engine.particle.selected) {
         if (this.state.x2 && this.state.y2) {
-          this.state.engine.particle.throw(
-            this.state.x2,
-            this.state.x1,
-            this.state.y2,
-            this.state.y1
-          );
         } else {
           this.state.engine.particle.drop(this.state.mouseX, this.state.mouseY);
         }
-        this.setState({ x1: null });
-        this.setState({ y1: null });
-        this.setState({ x2: null });
-        this.setState({ y2: null });
-        this.setState({ mouseX: null });
-        this.setState({ mouseY: null });
-        this.setState({ spacePressed: false });
+        this.nullThrowStates();
       }
     }
   }
@@ -189,11 +194,9 @@ class Main extends Component {
               }}
             />
             <div class="ui info message">
-              <i class="close icon"></i>
               <div class="header">
-                To give the particle force, click the ball and hold with left
-                mouse button, hold down space, drag the mouse in desired
-                direction, release space bar and then release the mouse.
+                To give the particle a force, click the ball and hold with left
+                mouse button & hold down space
               </div>
             </div>
             <div id="container">
