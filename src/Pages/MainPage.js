@@ -31,7 +31,7 @@ class Main extends Component {
     spacePressed: false,
     stopped: false,
 
-    activeMenuItem: menuStates.ELECTRIC_FIELDS,
+    activeMenuItem: menuStates.ENVIROMENTAL_CONDITIONS,
   };
 
   nullThrowStates() {
