@@ -31,11 +31,58 @@ export default class Particle {
     this.selected = false;
 
     //electric fields
-    this.electricField = false;
     this.eStrength = 0;
-    this.ePositiveBar = { x1: 0, y1: 0, x2: 0, y2: 0 };
-    this.eNegativeBar = { x1: 0, y1: 0, x2: 0, y2: 0 };
+    this.efieldActive = false;
+    this.particleCharge = null;
+    this.efield = {
+      tl: { x: null, y: null },
+      tr: { x: null, y: null },
+      bl: { x: null, y: null },
+      br: { x: null, y: null },
+    };
   }
+
+  ////////////////////////////
+  // electric field methods //
+  ////////////////////////////
+
+  setField(tl_x, tl_y, tr_x, tr_y, bl_x, bl_y, br_x, br_y, particleCharge) {
+    this.efield = {
+      tl: { x: tl_x, y: tl_y },
+      tr: { x: tr_x, y: tr_y },
+      bl: { x: bl_x, y: bl_y },
+      br: { x: br_x, y: br_y },
+    };
+    this.particleCharge = particleCharge;
+  }
+
+  inEField() {
+    const { tl, tr, bl } = this.efield;
+    if (this.efieldActive) {
+      if (
+        this.xPos > tl.x &&
+        this.xPos < tr.x &&
+        this.yPos < bl.y &&
+        this.yPos > tl.y
+      ) {
+        return true;
+      }
+      return false;
+    } else {
+      return false;
+    }
+  }
+
+  toggleElectricField(bool) {
+    this.efieldActive = bool;
+  }
+
+  updateParticleCharge(value) {
+    this.particleCharge = value;
+  }
+
+  ////////////////////////////
+  ////////////////////////////
 
   updateCor(value) {
     this.cor = value;
@@ -50,13 +97,14 @@ export default class Particle {
   }
 
   yForce() {
+    let eForce = this.inEField() ? 100 * this.particleCharge : null;
     const mass = this.mass;
     const normalForce =
       this.yPos + this.radius > this.height ? mass * this.g : 0;
     const friction = this.friction(this.yVel, this.airResistance);
     const gravity = mass * this.g;
     return function (x, v, dt) {
-      return (gravity - normalForce + friction * v * v) / mass;
+      return (gravity - normalForce + friction * v * v + eForce) / mass;
     };
   }
 

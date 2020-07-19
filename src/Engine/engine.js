@@ -13,12 +13,12 @@ export default class Engine {
     this.particle = new Particle(width / 2, 200, "red", height, width);
 
     this.electricFieldActive = false;
-    this.particleCharge = 1;
+    this.particleCharge = -1;
     this.efield = {
-      x1: 300,
-      x2: 500,
-      y1: 100,
-      y2: 300,
+      tl: { x: 300, y: 200 },
+      tr: { x: 500, y: 200 },
+      bl: { x: 300, y: 400 },
+      br: { x: 500, y: 400 },
     };
   }
 
@@ -28,15 +28,68 @@ export default class Engine {
 
   toggleElectricField(bool) {
     this.electricFieldActive = bool;
+    this.particle.toggleElectricField(bool);
   }
 
   updateCharge(charge) {
     this.particleCharge = charge;
+    this.particle.updateParticleCharge(charge);
   }
+
+  drawField(ctx) {
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "yellow";
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    if (this.electricFieldActive) {
+      const { tl, tr, bl, br } = this.efield;
+      this.particle.setField(
+        tl.x,
+        tl.y,
+        tr.x,
+        tr.y,
+        bl.x,
+        bl.y,
+        br.x,
+        br.y,
+        this.particleCharge
+      );
+
+      ctx.beginPath();
+      ctx.moveTo(tl.x, tl.y);
+      ctx.lineTo(tr.x, tr.y);
+      ctx.moveTo(bl.x, bl.y);
+      ctx.lineTo(br.x, br.y);
+      ctx.stroke();
+      ctx.closePath();
+      ctx.fillText("+ + + + + + + +", tl.x, tl.y + 11);
+      ctx.fillText("- - - - - - - - - - - - ", tl.x + 3, bl.y + 8);
+    }
+  }
+
+  drawParticleCharge(ctx, x, y) {
+    ctx.fillStyle = "yellow";
+    ctx.font = "30px Arial";
+    if (this.electricFieldActive && !this.particle.selected) {
+      this.particleCharge === -1
+        ? ctx.fillText(
+            "-",
+            x - 0.6 * this.particle.radius,
+            y + 0.8 * this.particle.radius
+          )
+        : ctx.fillText(
+            "+",
+            x - 0.9 * this.particle.radius,
+            y + 1 * this.particle.radius
+          );
+    }
+  }
+
+  ///////////////////////////////////////////////////////////////
 
   canvasArrow = (ctx, x1, y1, x2, y2) => {
     ctx.lineWidth = 2;
-    ctx.strokeStyle = "#ff0000";
+    ctx.strokeStyle = "white";
     ctx.beginPath();
     const tipLength = 10;
     const dx = x2 - x1;
@@ -53,6 +106,7 @@ export default class Engine {
       y2 - tipLength * Math.sin(Math.atan2(dy, dx) + Math.PI / 6)
     );
     ctx.stroke();
+    ctx.closePath();
   };
 
   isWithinBounds(x, y) {
@@ -78,6 +132,9 @@ export default class Engine {
 
   draw() {
     this.ctx.clearRect(0, 0, this.height * 2, this.width * 2);
+    this.particle.calculateKinematics();
+    this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
+    this.drawField(this.ctx);
     if (this.engineViewState && this.engineViewState.spacePressed) {
       this.canvasArrow(
         this.ctx,
@@ -87,9 +144,6 @@ export default class Engine {
         this.engineViewState.mouseY
       );
     }
-    this.particle.calculateKinematics();
-    this.drawBall(this.ctx, this.particle.xPos, this.particle.yPos);
-    this.drawField(this.ctx);
   }
 
   //method to update env variables
@@ -108,41 +162,9 @@ export default class Engine {
     }
   }
 
-  drawField(ctx) {
-    ctx.lineWidth = 15;
-    ctx.fillStyle = "yellow";
-    if (this.electricFieldActive) {
-      const { x1, x2, y1, y2 } = this.efield;
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y1);
-      ctx.moveTo(x1, y2);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-      this.canvasArrow(ctx, x1, y1, x1, y2);
-    }
-  }
-
-  drawParticleCharge(ctx, x, y) {
-    if (this.electricFieldActive && !this.particle.selected) {
-      ctx.strokeStyle = "yellow";
-      ctx.font = "30px Arial";
-      this.particleCharge === 1
-        ? ctx.fillText(
-            "-",
-            x - 0.6 * this.particle.radius,
-            y + 0.8 * this.particle.radius
-          )
-        : ctx.fillText(
-            "+",
-            x - 0.9 * this.particle.radius,
-            y + 1 * this.particle.radius
-          );
-    }
-  }
-
   drawBall(ctx, x, y) {
     ctx.lineWidth = 1;
+    ctx.fillStyle = this.particle.colour;
     ctx.beginPath();
     const engineViewState = this.engineViewState;
     if (this.particle.selected) {
@@ -164,7 +186,6 @@ export default class Engine {
     } else {
       ctx.arc(x, y, this.particle.radius, 0, Math.PI * 2);
     }
-    ctx.fillStyle = this.particle.colour;
     ctx.fill();
     ctx.closePath();
     this.drawParticleCharge(ctx, x, y);
