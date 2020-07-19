@@ -158,6 +158,9 @@ export default class Engine {
       case "airRes":
         this.particle.updateAirRes(val);
         break;
+      case "mass":
+        this.particle.updateMass(val);
+        break;
       default:
     }
   }

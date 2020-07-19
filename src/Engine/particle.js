@@ -96,6 +96,10 @@ export default class Particle {
     this.airResistance = value;
   }
 
+  updateMass(value) {
+    this.mass = value;
+  }
+
   yForce() {
     let eForce = this.inEField() ? 100 * this.particleCharge : null;
     const mass = this.mass;

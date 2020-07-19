@@ -14,7 +14,6 @@ function EnvironmentalConditions({ engineState }) {
               className="slider"
               min={0.3}
               max={0.8}
-              name="duration"
               onChange={(e) => {
                 engineState.updateEnvConditions("cor", e.target.value);
               }}
@@ -26,7 +25,6 @@ function EnvironmentalConditions({ engineState }) {
               className="slider"
               min={0.1}
               max={0.9}
-              name="duration"
               onChange={(e) => {
                 engineState.updateEnvConditions("cof", e.target.value);
               }}
@@ -38,7 +36,6 @@ function EnvironmentalConditions({ engineState }) {
               className="slider"
               min={0.1}
               max={0.9}
-              name="duration"
               onChange={(e) => {
                 engineState.updateEnvConditions("airRes", e.target.value);
               }}
