@@ -1,6 +1,8 @@
 
 # Physics engine project!
 
+## Motivation
+
 - my first physics engine (link https://github.com/jlonsdale/physics_engine.io) was purely based around velocity, this meant it could not handle variable acceleration)
 
 - my second engine involved collisions but was also base on velocity (https://github.com/jlonsdale/pool_table.io)
@@ -10,7 +12,7 @@
 
 - i didnt really make this for anyone to use i just like making physics engines, but if you get a kick out of it thats great :D
 
-# Deployment Link
+## Deployment Link
 
 -  https://physics-engine.herokuapp.com/
 
