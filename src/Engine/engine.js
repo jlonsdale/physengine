@@ -14,6 +14,7 @@ export default class Engine {
 
     this.electricFieldActive = false;
     this.particleCharge = -1;
+    this.eFieldStrength = this.particle ? this.particle.eFieldStrength : null;
     this.efield = {
       tl: { x: 300, y: 200 },
       tr: { x: 500, y: 200 },
@@ -34,6 +35,11 @@ export default class Engine {
   updateCharge(charge) {
     this.particleCharge = charge;
     this.particle.updateParticleCharge(charge);
+  }
+
+  updateEFieldStrength(value) {
+    this.eFieldStrength = value;
+    this.particle.updateEFieldStrength(value);
   }
 
   drawField(ctx) {

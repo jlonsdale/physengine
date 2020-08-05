@@ -31,7 +31,7 @@ export default class Particle {
     this.selected = false;
 
     //electric fields
-    this.eStrength = 0;
+    this.eFieldStrength = 10;
     this.efieldActive = false;
     this.particleCharge = null;
     this.efield = {
@@ -81,6 +81,10 @@ export default class Particle {
     this.particleCharge = value;
   }
 
+  updateEFieldStrength(value) {
+    this.eFieldStrength = value;
+  }
+
   ////////////////////////////
   ////////////////////////////
 
@@ -101,7 +105,9 @@ export default class Particle {
   }
 
   yForce() {
-    let eForce = this.inEField() ? 100 * this.particleCharge : null;
+    let eForce = this.inEField()
+      ? this.eFieldStrength * this.particleCharge
+      : null;
     const mass = this.mass;
     const normalForce =
       this.yPos + this.radius > this.height ? mass * this.g : 0;

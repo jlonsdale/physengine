@@ -1,18 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Radio } from "semantic-ui-react";
 import "./../../Pages/style.css";
 
 function ElectricFields({ engineState }) {
   const charge = engineState ? engineState.particleCharge : null;
   const activeState = engineState ? engineState.electricFieldActive : null;
+  const eFieldStrength = engineState ? engineState.eFieldStrength : null;
+  const [strength, setStrength] = useState(eFieldStrength);
 
-  const handleChange = (e, { value }) => {
+  const handleChargeChange = (e, { value }) => {
     engineState.updateCharge(value);
+  };
+
+  const handleStrengthChange = (e) => {
+    setStrength(e.target.value);
+    engineState.updateEFieldStrength(e.target.value);
   };
 
   const handleToggle = (value, charge) => {
     engineState.toggleElectricField(value, charge);
-    console.log(engineState.particleCharge);
   };
 
   return (
@@ -37,7 +43,7 @@ function ElectricFields({ engineState }) {
                 name="radioGroup"
                 value={1}
                 checked={charge === 1}
-                onChange={handleChange}
+                onChange={handleChargeChange}
               />
             </Form.Field>
             <Form.Field>
@@ -46,7 +52,7 @@ function ElectricFields({ engineState }) {
                 name="radioGroup"
                 value={-1}
                 checked={charge === -1}
-                onChange={handleChange}
+                onChange={handleChargeChange}
               />
             </Form.Field>
           </Form>
@@ -54,9 +60,11 @@ function ElectricFields({ engineState }) {
           <input
             type="range"
             className="slider"
-            min={0.3}
-            max={0.8}
+            min={1}
+            max={100}
             step={0.05}
+            value={strength}
+            onChange={handleStrengthChange}
           />
           <h4>Electric Field Position</h4>
           <h5>Width</h5>
