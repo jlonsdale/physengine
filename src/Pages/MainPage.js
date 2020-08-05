@@ -255,7 +255,7 @@ class Main extends Component {
                   }}
                 />
                 <div id="console">
-                  <h3> Graphing Console </h3>
+                  <h3> Console </h3>
                 </div>
               </Container>
             </div>
