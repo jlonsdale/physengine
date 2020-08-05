@@ -35,10 +35,10 @@ export default class Particle {
     this.efieldActive = false;
     this.particleCharge = null;
     this.efield = {
-      tl: { x: null, y: null },
-      tr: { x: null, y: null },
-      bl: { x: null, y: null },
-      br: { x: null, y: null },
+      tl: { x: 300, y: 200 },
+      tr: { x: 500, y: 200 },
+      bl: { x: 300, y: 400 },
+      br: { x: 500, y: 400 },
     };
   }
 
@@ -54,6 +54,11 @@ export default class Particle {
       br: { x: br_x, y: br_y },
     };
     this.particleCharge = particleCharge;
+  }
+
+  editWidth(bool) {
+    if (bool) {
+    }
   }
 
   inEField() {

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Form, Radio } from "semantic-ui-react";
+import { Form, Radio, Button, Icon } from "semantic-ui-react";
 import "./../../Pages/style.css";
 
 function ElectricFields({ engineState }) {
   const charge = engineState ? engineState.particleCharge : null;
   const activeState = engineState ? engineState.electricFieldActive : null;
   const eFieldStrength = engineState ? engineState.eFieldStrength : null;
+
   const [strength, setStrength] = useState(eFieldStrength);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   const handleChargeChange = (e, { value }) => {
     engineState.updateCharge(value);
@@ -20,10 +23,9 @@ function ElectricFields({ engineState }) {
   const handleToggle = (value, charge) => {
     engineState.toggleElectricField(value, charge);
   };
-
   return (
     <div>
-      <h2> Electric Fields (WIP) </h2>
+      <h2> Electric Fields </h2>
       <h4>Activate</h4>
       <Radio
         toggle
@@ -66,23 +68,26 @@ function ElectricFields({ engineState }) {
             value={strength}
             onChange={handleStrengthChange}
           />
-          <h4>Electric Field Position</h4>
-          <h5>Width</h5>
-          <input
-            type="range"
-            className="slider"
-            min={0.3}
-            max={0.8}
-            step={0.05}
-          />
-          <h5>Thickness</h5>
-          <input
-            type="range"
-            className="slider"
-            min={0.3}
-            max={0.8}
-            step={0.05}
-          />
+          <h3>Electric Field Position (WIP) </h3>
+
+          <Button.Group>
+            <Button color="green">
+              <Icon name="plus circle" /> Width
+            </Button>
+            <Button color="red">
+              <Icon name="minus circle" /> Width
+            </Button>
+          </Button.Group>
+          <br />
+          <br />
+          <Button.Group>
+            <Button color="green">
+              <Icon name="plus circle" /> Height
+            </Button>
+            <Button color="red">
+              <Icon name="minus circle" /> Height
+            </Button>
+          </Button.Group>
         </div>
       ) : null}
     </div>
