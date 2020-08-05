@@ -1,6 +1,8 @@
 
 # Physics engine project!
 
+[![Image from Gyazo](https://i.gyazo.com/5541ca60203ff9f6fd373f71518dacbe.gif)](https://gyazo.com/5541ca60203ff9f6fd373f71518dacbe)
+
 ## Motivation
 
 - my first physics engine (link https://github.com/jlonsdale/physics_engine.io) was purely based around velocity, this meant it could not handle variable acceleration)
