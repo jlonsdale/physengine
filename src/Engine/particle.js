@@ -31,9 +31,9 @@ export default class Particle {
     this.selected = false;
 
     //electric fields
-    this.eFieldStrength = 10;
+    this.eFieldStrength = 5;
     this.efieldActive = false;
-    this.particleCharge = null;
+    this.particleCharge = -1;
     this.efield = {
       tl: { x: 300, y: 200 },
       tr: { x: 500, y: 200 },
@@ -56,8 +56,35 @@ export default class Particle {
     this.particleCharge = particleCharge;
   }
 
-  editWidth(bool) {
-    if (bool) {
+  getEFieldWidth() {
+    return Math.abs(this.efield.tl.x - this.efield.tr.x);
+  }
+  getEFieldHeight() {
+    return Math.abs(this.efield.tl.y - this.efield.bl.y);
+  }
+
+  changeFieldPos(type, value) {
+    if (type === "width") {
+      if (
+        this.getEFieldWidth() + value * 2 >= 100 &&
+        this.getEFieldWidth() + value * 2 <= 500
+      ) {
+        this.efield.tl.x -= value;
+        this.efield.bl.x -= value;
+        this.efield.tr.x += value;
+        this.efield.br.x += value;
+      }
+    }
+    if (type === "height") {
+      if (
+        this.getEFieldHeight() + value * 2 > 50 &&
+        this.getEFieldHeight() + value * 2 < 300
+      ) {
+        this.efield.tl.y -= value;
+        this.efield.bl.y += value;
+        this.efield.tr.y -= value;
+        this.efield.br.y += value;
+      }
     }
   }
 

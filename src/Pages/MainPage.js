@@ -205,7 +205,7 @@ class Main extends Component {
                   <div id="sidebar" className="ui segment">
                     {this.state.activeMenuItem === menuStates.INFORMATION ? (
                       <div className="ui green inverted segment">
-                        <h3>How it works? </h3>
+                        <h2>How it works? </h2>
                         this engine calculates the vector sum of forces acting
                         on the particle. It then performs an integral to get
                         kinematic values each frame. The integral approximation
@@ -225,11 +225,11 @@ class Main extends Component {
                     {this.state.activeMenuItem ===
                     menuStates.ELECTRIC_FIELDS ? (
                       <div className="ui orange inverted segment">
-                        <ElectricFields
-                          engineState={
-                            this.state.engine ? this.state.engine : null
-                          }
-                        ></ElectricFields>
+                        {this.state.engine ? (
+                          <ElectricFields
+                            engineState={this.state.engine}
+                          ></ElectricFields>
+                        ) : null}
                       </div>
                     ) : null}
                     <span>

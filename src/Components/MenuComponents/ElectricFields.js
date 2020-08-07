@@ -8,8 +8,9 @@ function ElectricFields({ engineState }) {
   const eFieldStrength = engineState ? engineState.eFieldStrength : null;
 
   const [strength, setStrength] = useState(eFieldStrength);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+
+  const [width, setWidth] = useState(engineState.eFieldWidth);
+  const [height, setHeight] = useState(engineState.eFieldHeight);
 
   const handleChargeChange = (e, { value }) => {
     engineState.updateCharge(value);
@@ -23,6 +24,11 @@ function ElectricFields({ engineState }) {
   const handleToggle = (value, charge) => {
     engineState.toggleElectricField(value, charge);
   };
+
+  const handleFieldChange = (type, charge) => {
+    engineState.updateEfieldPosition(type, charge);
+  };
+
   return (
     <div>
       <h2> Electric Fields </h2>
@@ -34,7 +40,6 @@ function ElectricFields({ engineState }) {
           handleToggle(!activeState);
         }}
       />
-
       {activeState ? (
         <div className="sliderContainer">
           <h4>Particle Charge</h4>
@@ -63,28 +68,48 @@ function ElectricFields({ engineState }) {
             type="range"
             className="slider"
             min={1}
-            max={100}
+            max={50}
             step={0.05}
             value={strength}
             onChange={handleStrengthChange}
           />
-          <h3>Electric Field Position (WIP) </h3>
+          <h3>Electric Field Position </h3>
 
           <Button.Group>
-            <Button color="green">
+            <Button
+              color="green"
+              onClick={() => {
+                handleFieldChange("width", 5);
+              }}
+            >
               <Icon name="plus circle" /> Width
             </Button>
-            <Button color="red">
+            <Button
+              color="red"
+              onClick={() => {
+                handleFieldChange("width", -5);
+              }}
+            >
               <Icon name="minus circle" /> Width
             </Button>
           </Button.Group>
           <br />
           <br />
           <Button.Group>
-            <Button color="green">
+            <Button
+              color="green"
+              onClick={() => {
+                handleFieldChange("height", 5);
+              }}
+            >
               <Icon name="plus circle" /> Height
             </Button>
-            <Button color="red">
+            <Button
+              color="red"
+              onClick={() => {
+                handleFieldChange("height", -5);
+              }}
+            >
               <Icon name="minus circle" /> Height
             </Button>
           </Button.Group>
