@@ -4,8 +4,11 @@ import "./style.css";
 import Container from "../Components/Container";
 import HeaderMenu from "../Components/Menu";
 import Engine from "../Engine/engine.js";
-import { EnvironmentalConditions } from "../Components/MenuComponents";
-import ElectricFields from "../Components/MenuComponents/ElectricFields";
+import {
+  EnvironmentalConditions,
+  ElectricFields,
+  HarmonicMotion,
+} from "../Components/MenuComponents";
 
 const menuStates = {
   ENVIROMENTAL_CONDITIONS: "ENVIROMENTAL_CONDITIONS",
@@ -212,6 +215,7 @@ class Main extends Component {
                         used is a 4th order Runge-Kutta approximation.
                       </div>
                     ) : null}
+
                     {this.state.activeMenuItem ===
                     menuStates.ENVIROMENTAL_CONDITIONS ? (
                       <div className="ui blue inverted segment">
@@ -222,6 +226,7 @@ class Main extends Component {
                         ></EnvironmentalConditions>
                       </div>
                     ) : null}
+
                     {this.state.activeMenuItem ===
                     menuStates.ELECTRIC_FIELDS ? (
                       <div className="ui orange inverted segment">
@@ -232,6 +237,16 @@ class Main extends Component {
                         ) : null}
                       </div>
                     ) : null}
+
+                    {this.state.activeMenuItem ===
+                    menuStates.HARMONIC_MOTION ? (
+                      <div className="ui purple inverted segment">
+                        {this.state.engine ? (
+                          <HarmonicMotion></HarmonicMotion>
+                        ) : null}
+                      </div>
+                    ) : null}
+
                     <span>
                       <Button.Group>
                         <Button icon="play" onClick={this.play} />

@@ -9,9 +9,6 @@ function ElectricFields({ engineState }) {
 
   const [strength, setStrength] = useState(eFieldStrength);
 
-  const [width, setWidth] = useState(engineState.eFieldWidth);
-  const [height, setHeight] = useState(engineState.eFieldHeight);
-
   const handleChargeChange = (e, { value }) => {
     engineState.updateCharge(value);
   };
